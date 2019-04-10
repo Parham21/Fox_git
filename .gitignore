@@ -87,7 +87,8 @@ local_settings.py
 db.sqlite3
 
 
-.idea
+.idea/
+fox/idea/
 
 venv
 
