@@ -86,4 +86,9 @@ local_settings.py
 .env
 db.sqlite3
 
-photos/
+
+.idea
+
+venv
+
+.python-version
