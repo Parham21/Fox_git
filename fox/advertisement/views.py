@@ -40,5 +40,5 @@ def add_advertisement(request):
             return render(request, '../templates/add_advertisement.html', {'form': form})
 
 
-def add_advertisement(request):
+def dashboard(request):
     return render(request, '../templates/dashboard.html')
