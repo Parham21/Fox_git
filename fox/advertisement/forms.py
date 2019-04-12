@@ -6,10 +6,8 @@ from advertisement.validators import phone_validator, string_check
 
 
 class SearchForm(forms.Form):
-    title = forms.CharField(label='Advertisement Title', max_length=80)
-
-
-
+    title = forms.CharField(label='Advertisement Title', max_length=80,
+            widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter the advertisement\'s title'}))
 
 
 class AddAdvertisementForm(ModelForm):
