@@ -9,6 +9,7 @@ from advertisement.constant import SEX_CHOICES
 def get_image_path(instance, filename):
     return os.path.join('photos', str(instance.id), filename)
 
+
 class Advertisement(models.Model):
     title = models.CharField(max_length=80)
     price = models.IntegerField()
@@ -16,13 +17,12 @@ class Advertisement(models.Model):
     description = models.TextField()
     profile_image = models.ImageField(upload_to=get_image_path, default='photos/default.jpg', null=True)
 
-
     area = models.ForeignKey('Area', on_delete=models.CASCADE)
     advertiser = models.ForeignKey('Advertiser', on_delete=models.CASCADE)
 
-
     def __str__(self):
         return self.title + ' ' + self.area.name + ' ' + self.area.city.name
+
 
 class Advertiser(models.Model):
     first_name = models.CharField(max_length=30)
@@ -37,11 +37,13 @@ class Advertiser(models.Model):
     def __str__(self):
         return self.first_name + ' ' + self.last_name
 
+
 class City(models.Model):
     name = models.CharField(max_length=30)
 
     def __str__(self):
         return self.name
+
 
 class Area(models.Model):
     name = models.CharField(max_length=40)

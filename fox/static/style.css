@@ -26,6 +26,25 @@ legend {
     border-radius: 20px;
 }
 
+.search-res img {
+  float: left;
+  width: 100px;
+  height: 100px;
+  background: #555;
+}
+
+.search-res h2 {
+  position: relative;
+  top: 18px;
+  left: 10px;
+}
+
+.search-res h6 {
+  position: relative;
+  top: 18px;
+  left: 10px;
+}
+
 .fox-navbar {
     border-bottom: 1px solid rgba(0, 0, 0, 0.3);
     background-color: white;
