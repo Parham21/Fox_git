@@ -17,6 +17,17 @@ class AddAdvertisementForm(ModelForm):
         model = Advertisement
         exclude = ['advertiser']
 
+    def __init__(self, *args, **kwargs):
+        super(AddAdvertisementForm, self).__init__(*args, **kwargs)
+        self.fields['title'].widget.attrs['placeholder'] = 'title'
+        self.fields['price'].widget.attrs['placeholder'] = 'price'
+        self.fields['phone'].widget.attrs['placeholder'] = 'phone'
+        self.fields['description'].widget.attrs['placeholder'] = 'description'
+        self.fields['title'].widget.attrs['class'] = 'form-control '
+        self.fields['price'].widget.attrs['class'] = 'form-control '
+        self.fields['phone'].widget.attrs['class'] = 'form-control '
+        self.fields['description'].widget.attrs['class'] = 'form-control '
+
     def clean(self):
         data = self.cleaned_data
         if phone_validator(data['phone'])[0] is False:
