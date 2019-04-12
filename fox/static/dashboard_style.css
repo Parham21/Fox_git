@@ -147,15 +147,15 @@ header nav ul li a:before {
 }
 
 header nav ul li:first-child a:before {
-    content: "\268f";
+    content: "\1f464";
 }
 
 header nav ul li:nth-child(2) a:before {
-    content: "\1f465";
+    content: "\FF0B";
 }
 
 header nav ul li:nth-child(3) a:before {
-    content: "\1f4c5";
+    content: "\1f50d";
 }
 
 header nav ul li:nth-child(4) a:before {
