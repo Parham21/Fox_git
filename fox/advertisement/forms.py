@@ -31,7 +31,7 @@ class AddAdvertisementForm(ModelForm):
     def clean(self):
         data = self.cleaned_data
         if phone_validator(data['phone'])[0] is False:
-            raise forms.ValidationError(phone_validator(data['phone'])[1])
+            self._errors['phone'] = phone_validator(data['phone'])[1]
         return data
 
     def save(self, commit=True):

@@ -23,10 +23,10 @@ def normalize_persian_characters(text):
 
 def phone_validator(phone):
     if not string_check(phone, min_length=11, max_length=11)[0]:
-        return False, 'شماره موبایل وارد شده نامعتبر است'
+        return False, 'Not a valid Iran mobile number'
     phone = normalize_persian_characters(phone).strip()
     if not phone.startswith('09'):
-        return False, 'شماره موبایل وارد شده نامعتبر است'
+        return False, 'Not a valid Iran mobile number'
     return True, phone
 
 def string_check(text, verbose_name='ورودی', min_length=None, max_length=None, alphanumeric=False):
