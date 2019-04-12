@@ -7,14 +7,14 @@ from advertisement.constant import SEX_CHOICES
 
 
 def get_image_path(instance, filename):
-    return os.path.join('advertisement' ,'photos', 'profiles', str(Advertisement.objects.all().count()) + filename)
+    return os.path.join(str(Advertisement.objects.all().count()) + filename)
 
 class Advertisement(models.Model):
     title = models.CharField(max_length=80)
     price = models.IntegerField()
     phone = models.CharField(max_length=12)
     description = models.TextField()
-    profile_image = models.ImageField(upload_to=get_image_path, default='photos/default.jpg')
+    profile_image = models.ImageField(upload_to=get_image_path, default='../static/default.jpg')
 
 
     area = models.ForeignKey('Area', on_delete=models.CASCADE)
