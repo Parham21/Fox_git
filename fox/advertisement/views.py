@@ -29,7 +29,7 @@ def search(request):
 def add_advertisement(request):
     if request.method == 'GET':
         form = AddAdvertisementForm()
-        return render(request, '../templates/temp.html', {'form': form})
+        return render(request, '../templates/add_advertisement.html', {'form': form})
     else:
         form = AddAdvertisementForm(request.POST)
         form.user = request.user
@@ -37,11 +37,11 @@ def add_advertisement(request):
             form.save()
             form = SearchForm()
             ads = Advertisement.objects.all()
-            return render(request, '../templates/temp.html', {
+            return render(request, '../templates/search.html', {
                 'ads': ads,
                 'form': form
             })
         else:
-            return render(request, '../templates/temp.html', {'form': form})
+            return render(request, '../templates/add_advertisement.html', {'form': form})
 
 
