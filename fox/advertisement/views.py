@@ -31,7 +31,7 @@ def add_advertisement(request):
         form = AddAdvertisementForm()
         return render(request, '../templates/add_advertisement.html', {'form': form})
     else:
-        form = AddAdvertisementForm(request.POST)
+        form = AddAdvertisementForm(request.POST, request.FILES)
         form.user = request.user
         if form.is_valid():
             form.save()

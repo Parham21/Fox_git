@@ -89,6 +89,7 @@ db.sqlite3
 
 .idea/
 fox/.idea/
+fox/advertisement/photos/profiles/
 
 venv
 
