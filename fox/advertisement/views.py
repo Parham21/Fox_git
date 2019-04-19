@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect
 
 from advertisement.models import Advertisement
-from .forms import SearchForm, AddAdvertisementForm
-
+from .forms import SearchForm, AddAdvertisementForm, LoginForm, RegisterForm, ResetPassForm
 
 
 def search(request):
@@ -42,3 +41,49 @@ def add_advertisement(request):
 
 def dashboard(request):
     return render(request, '../templates/dashboard.html')
+
+
+def home(request):
+    return render(request, '../templates/home.html')
+
+
+def login(request):
+    if request.method == 'GET':
+        form = LoginForm()
+        return render(request, '../templates/login.html', {'form': form})
+    else:
+        form = LoginForm(request.POST, request.FILES)
+        form.user = request.user
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+        else:
+            return render(request, '../templates/login.html', {'form': form})
+
+
+def register(request):
+    if request.method == 'GET':
+        form = RegisterForm()
+        return render(request, '../templates/register.html', {'form': form})
+    else:
+        form = RegisterForm(request.POST, request.FILES)
+        form.user = request.user
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+        else:
+            return render(request, '../templates/register.html', {'form': form})
+
+
+def reset_password(request):
+    if request.method == 'GET':
+        form = ResetPassForm()
+        return render(request, '../templates/forget_password.html', {'form': form})
+    else:
+        form = ResetPassForm(request.POST, request.FILES)
+        form.user = request.user
+        if form.is_valid():
+            form.save()
+            return render(request, '../templates/forget_password.html', {'form': form})
+        else:
+            return render(request, '../templates/forget_password.html', {'form': form})
