@@ -3,6 +3,7 @@ from django.forms import ModelForm
 
 from advertisement.models import Advertisement, Advertiser
 from advertisement.validators import phone_validator, string_check
+from django.contrib.auth.models import User
 
 
 class SearchForm(forms.Form):
@@ -38,6 +39,45 @@ class AddAdvertisementForm(ModelForm):
         if commit:
             instance.save()
         return instance
+
+class AddAdvertiserForm(ModelForm):
+    username = forms.CharField(max_length=20)
+    password = forms.PasswordInput()
+
+    class Meta:
+        model = Advertiser
+        exclude = ['user']
+
+    def __init__(self, *args, **kwargs):
+        super(AddAdvertiserForm, self).__init__(*args, **kwargs)
+        self.fields['first_name'].widget.attrs['placeholder'] = 'first_name'
+        self.fields['last_name'].widget.attrs['placeholder'] = 'last_name'
+        self.fields['phone'].widget.attrs['placeholder'] = 'phone'
+        self.fields['email'].widget.attrs['placeholder'] = 'email'
+        self.fields['sex'].widget.attrs['placeholder'] = 'sex'
+        self.fields['age'].widget.attrs['placeholder'] = 'age'
+        self.fields['first_name'].widget.attrs['class'] = 'form-control '
+        self.fields['last_name'].widget.attrs['class'] = 'form-control '
+        self.fields['phone'].widget.attrs['class'] = 'form-control '
+        self.fields['email'].widget.attrs['class'] = 'form-control '
+        self.fields['sex'].widget.attrs['class'] = 'form-control '
+        self.fields['age'].widget.attrs['class'] = 'form-control '
+
+    def clean(self):
+        data = self.cleaned_data
+        if phone_validator(data['phone'])[0] is False:
+            self._errors['phone'] = phone_validator(data['phone'])[1]
+        return data
+
+    def save(self, commit=True):
+        instance = super(AddAdvertiserForm, self).save(commit=False)
+        user_instance = User.objects.create_user(username=self.username, password=self.password)
+        user_instance.save()
+        instance.user = user_instance
+        if commit:
+            instance.save()
+        return instance
+
 
 
 class LoginForm(ModelForm):
