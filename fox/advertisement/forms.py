@@ -81,50 +81,50 @@ class AddAdvertiserForm(ModelForm):
 
 
 
-class LoginForm(ModelForm):
-    class Meta:
-        model = Advertisement  # replace with User model
-        exclude = ['date_joined']
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=20)
+    password = forms.CharField(widget=forms.PasswordInput)
 
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
-        # self.fields['title'].widget.attrs['placeholder'] = 'title'
-        # self.fields['description'].widget.attrs['class'] = 'form-control '
+        self.fields['username'].widget.attrs['placeholder'] = 'username'
+        self.fields['username'].widget.attrs['class'] = 'form-control '
+
+        self.fields['password'].widget.attrs['placeholder'] = '*********'
+        self.fields['password'].widget.attrs['class'] = 'form-control '
 
     def clean(self):
         data = self.cleaned_data
-        # if phone_validator(data['phone'])[0] is False:
-        #     self._errors['phone'] = phone_validator(data['phone'])[1]
         return data
 
-    def save(self, commit=True):
-        instance = super(LoginForm, self).save(commit=False)
-        if commit:
-            instance.save()
-        return instance
+    # def save(self, commit=True):
+    #     instance = super(LoginForm, self).save(commit=False)
+    #     if commit:
+    #         instance.save()
+    #     return instance
 
 
-class RegisterForm(ModelForm):
-    class Meta:
-        model = Advertisement  # replace with User model
-        exclude = ['date_joined']
-
-    def __init__(self, *args, **kwargs):
-        super(RegisterForm, self).__init__(*args, **kwargs)
-        # self.fields['title'].widget.attrs['placeholder'] = 'title'
-        # self.fields['description'].widget.attrs['class'] = 'form-control '
-
-    def clean(self):
-        data = self.cleaned_data
-        # if phone_validator(data['phone'])[0] is False:
-        #     self._errors['phone'] = phone_validator(data['phone'])[1]
-        return data
-
-    def save(self, commit=True):
-        instance = super(RegisterForm, self).save(commit=False)
-        if commit:
-            instance.save()
-        return instance
+# class RegisterForm(ModelForm):
+#     class Meta:
+#         model = Advertisement  # replace with User model
+#         exclude = ['date_joined']
+#
+#     def __init__(self, *args, **kwargs):
+#         super(RegisterForm, self).__init__(*args, **kwargs)
+#         # self.fields['title'].widget.attrs['placeholder'] = 'title'
+#         # self.fields['description'].widget.attrs['class'] = 'form-control '
+#
+#     def clean(self):
+#         data = self.cleaned_data
+#         # if phone_validator(data['phone'])[0] is False:
+#         #     self._errors['phone'] = phone_validator(data['phone'])[1]
+#         return data
+#
+#     def save(self, commit=True):
+#         instance = super(RegisterForm, self).save(commit=False)
+#         if commit:
+#             instance.save()
+#         return instance
 
 
 class ResetPassForm(ModelForm):

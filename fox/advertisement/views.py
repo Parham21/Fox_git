@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 
 from advertisement.models import Advertisement
-from .forms import SearchForm, AddAdvertisementForm, LoginForm, RegisterForm, ResetPassForm, AddAdvertiserForm
+from .forms import SearchForm, AddAdvertisementForm, LoginForm, ResetPassForm, AddAdvertiserForm
+from django.contrib.auth import authenticate, login
 
 
 def search(request):
@@ -47,16 +48,19 @@ def home(request):
     return render(request, '../templates/home.html')
 
 
-def login(request):
+def login_view(request):
     if request.method == 'GET':
         form = LoginForm()
         return render(request, '../templates/login.html', {'form': form})
     else:
-        form = LoginForm(request.POST, request.FILES)
-        form.user = request.user
-        if form.is_valid():
-            form.save()
+        form = LoginForm(request.POST)
+        user = authenticate(request, username=form['username'].value(), password=form['password'].value())
+        if user is not None:
+            login(request, user)
             return redirect('dashboard')
+        # if form.is_valid():
+        #     form.save()
+        #     return redirect('dashboard')
         else:
             return render(request, '../templates/login.html', {'form': form})
 

@@ -7,7 +7,7 @@ from advertisement import views
 
 urlpatterns = [
     path('', views.home),
-    path('login', views.login),
+    path('login', views.login_view),
     path('register', views.register),
     path('reset_password', views.reset_password),
     path('advertisement/', include('advertisement.urls')),
