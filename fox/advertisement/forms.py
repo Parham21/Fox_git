@@ -41,8 +41,9 @@ class AddAdvertisementForm(ModelForm):
         return instance
 
 class AddAdvertiserForm(ModelForm):
+
     username = forms.CharField(max_length=20)
-    password = forms.PasswordInput()
+    password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
         model = Advertiser
@@ -71,7 +72,7 @@ class AddAdvertiserForm(ModelForm):
 
     def save(self, commit=True):
         instance = super(AddAdvertiserForm, self).save(commit=False)
-        user_instance = User.objects.create_user(username=self.username, password=self.password)
+        user_instance = User.objects.create_user(username=self.cleaned_data['username'], password=self.cleaned_data['password'])
         user_instance.save()
         instance.user = user_instance
         if commit:

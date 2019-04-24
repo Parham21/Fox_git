@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 
 from advertisement.models import Advertisement
-from .forms import SearchForm, AddAdvertisementForm, LoginForm, RegisterForm, ResetPassForm
+from .forms import SearchForm, AddAdvertisementForm, LoginForm, RegisterForm, ResetPassForm, AddAdvertiserForm
 
 
 def search(request):
@@ -63,11 +63,11 @@ def login(request):
 
 def register(request):
     if request.method == 'GET':
-        form = RegisterForm()
+        form = AddAdvertiserForm()
         return render(request, '../templates/register.html', {'form': form})
     else:
-        form = RegisterForm(request.POST, request.FILES)
-        form.user = request.user
+        form = AddAdvertiserForm(request.POST)
+        # form.user = request.user
         if form.is_valid():
             form.save()
             return redirect('dashboard')
