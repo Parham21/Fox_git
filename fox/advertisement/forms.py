@@ -97,54 +97,13 @@ class LoginForm(forms.Form):
         data = self.cleaned_data
         return data
 
-    # def save(self, commit=True):
-    #     instance = super(LoginForm, self).save(commit=False)
-    #     if commit:
-    #         instance.save()
-    #     return instance
 
 
-# class RegisterForm(ModelForm):
-#     class Meta:
-#         model = Advertisement  # replace with User model
-#         exclude = ['date_joined']
-#
-#     def __init__(self, *args, **kwargs):
-#         super(RegisterForm, self).__init__(*args, **kwargs)
-#         # self.fields['title'].widget.attrs['placeholder'] = 'title'
-#         # self.fields['description'].widget.attrs['class'] = 'form-control '
-#
-#     def clean(self):
-#         data = self.cleaned_data
-#         # if phone_validator(data['phone'])[0] is False:
-#         #     self._errors['phone'] = phone_validator(data['phone'])[1]
-#         return data
-#
-#     def save(self, commit=True):
-#         instance = super(RegisterForm, self).save(commit=False)
-#         if commit:
-#             instance.save()
-#         return instance
-
-
-class ResetPassForm(ModelForm):
-    class Meta:
-        model = Advertisement  # replace with User model
-        exclude = ['date_joined']
+class ResetPassForm(forms.Form):
+    email = forms.EmailField()
 
     def __init__(self, *args, **kwargs):
         super(ResetPassForm, self).__init__(*args, **kwargs)
-        # self.fields['title'].widget.attrs['placeholder'] = 'title'
-        # self.fields['description'].widget.attrs['class'] = 'form-control '
+        self.fields['email'].widget.attrs['placeholder'] = 'email'
+        self.fields['email'].widget.attrs['class'] = 'form-control '
 
-    def clean(self):
-        data = self.cleaned_data
-        # if phone_validator(data['phone'])[0] is False:
-        #     self._errors['phone'] = phone_validator(data['phone'])[1]
-        return data
-
-    def save(self, commit=True):
-        instance = super(ResetPassForm, self).save(commit=False)
-        if commit:
-            instance.save()
-        return instance

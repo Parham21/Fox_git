@@ -1,9 +1,11 @@
 import os
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 
 from advertisement.constant import SEX_CHOICES
+from advertisement.utils import generate_random_token
 
 
 def get_image_path(instance, filename):
@@ -52,3 +54,14 @@ class Area(models.Model):
 
     def __str__(self):
         return self.city.name + ' ' + self.name
+
+
+class ResetPassword(models.Model):
+    advertiser = models.ForeignKey(Advertiser, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    token = models.CharField(max_length=32, default=generate_random_token)
+
+    def get_reset_password_link(self):
+        return "{}/reset_password.html?token={}".format(settings.SITE_DOMAIN, self.token)
+
+

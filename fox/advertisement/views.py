@@ -1,6 +1,9 @@
+from django.core.mail import EmailMessage
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 
-from advertisement.models import Advertisement
+from advertisement.models import Advertisement, Advertiser, ResetPassword
+from advertisement.utils import send_email_async
 from .forms import SearchForm, AddAdvertisementForm, LoginForm, ResetPassForm, AddAdvertiserForm
 from django.contrib.auth import authenticate, login
 
@@ -58,9 +61,6 @@ def login_view(request):
         if user is not None:
             login(request, user)
             return redirect('dashboard')
-        # if form.is_valid():
-        #     form.save()
-        #     return redirect('dashboard')
         else:
             return render(request, '../templates/login.html', {'form': form})
 
@@ -71,7 +71,6 @@ def register(request):
         return render(request, '../templates/register.html', {'form': form})
     else:
         form = AddAdvertiserForm(request.POST)
-        # form.user = request.user
         if form.is_valid():
             form.save()
             return redirect('dashboard')
@@ -85,9 +84,19 @@ def reset_password(request):
         return render(request, '../templates/forget_password.html', {'form': form})
     else:
         form = ResetPassForm(request.POST, request.FILES)
-        form.user = request.user
-        if form.is_valid():
-            form.save()
-            return render(request, '../templates/forget_password.html', {'form': form})
-        else:
-            return render(request, '../templates/forget_password.html', {'form': form})
+        try:
+            advertiser = Advertiser.objects.filter(email=form.email)
+            reset_password = ResetPassword(advertiser=advertiser)
+            reset_password.save()
+            subject = 'Reset Password'
+            body = render_to_string('../advertisement/templates/email_reset_password_template.txt', context={
+                'username': advertiser.user.username,
+                'reset_link': reset_password.get_reset_password_link()
+            })
+            email = EmailMessage(subject=subject, body=body, to=[advertiser.email])
+            send_email_async(email)
+        except Advertiser.DoesNotExist:
+            return render(request, '../templates/forget_password.html', {
+                'form': form,
+                'error': 'No user with this email address'
+            })
