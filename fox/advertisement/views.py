@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.core.mail import EmailMessage
 from django.http import Http404
 from django.http import HttpResponse
@@ -91,16 +92,18 @@ def reset_password(request):
     else:
         form = ResetPassForm(request.POST, request.FILES)
         try:
-            advertiser = Advertiser.objects.filter(email=form.email)
+            advertiser = Advertiser.objects.filter(email=form.data['email'])[0]
             reset_password = ResetPassword(advertiser=advertiser)
             reset_password.save()
             subject = 'Reset Password'
-            body = render_to_string('../advertisement/templates/email_reset_password_template.txt', context={
+            body = render_to_string('email_template', context={
                 'username': advertiser.user.username,
                 'reset_link': reset_password.get_reset_password_link()
             })
             email = EmailMessage(subject=subject, body=body, to=[advertiser.email])
             send_email_async(email)
+            messages.info(request, 'An email has been send for you!')
+            return redirect('home')
         except Advertiser.DoesNotExist:
             return render(request, '../templates/forget_password.html', {
                 'form': form,

@@ -131,3 +131,12 @@ STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 
 MEDIA_ROOT = STATIC_DIR = os.path.join(BASE_DIR, "media")
 MEDIA_URL = '/media/'
+
+SITE_DOMAIN = 'http://127.0.0.1:8000'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'foxcompanycecourse@gmail.com'
+EMAIL_HOST_PASSWORD = 'inventor1375'
