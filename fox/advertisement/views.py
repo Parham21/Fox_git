@@ -72,6 +72,7 @@ def logout_view(request):
     logout(request)
     return redirect('home')
 
+
 def register(request):
     if request.method == 'GET':
         form = AddAdvertiserForm()
@@ -93,12 +94,12 @@ def reset_password(request):
         form = ResetPassForm(request.POST, request.FILES)
         try:
             advertiser = Advertiser.objects.filter(email=form.data['email'])[0]
-            reset_password = ResetPassword(advertiser=advertiser)
-            reset_password.save()
+            new_password = ResetPassword(advertiser=advertiser)
+            new_password.save()
             subject = 'Reset Password'
             body = render_to_string('email_template', context={
                 'username': advertiser.user.username,
-                'reset_link': reset_password.get_reset_password_link()
+                'reset_link': new_password.get_reset_password_link()
             })
             email = EmailMessage(subject=subject, body=body, to=[advertiser.email])
             send_email_async(email)
@@ -109,6 +110,7 @@ def reset_password(request):
                 'error': 'No user with this email address'
             })
 
+
 def change_password(request):
     if request.method == 'GET':
         form = SubmitPassword()
@@ -116,11 +118,10 @@ def change_password(request):
     else:
         form = SubmitPassword(request.POST)
         token = request.GET.get('token')
-        reset_password = ResetPassword.objects.filter(token=token)
-        reset_password.advertiser.user.set_password(form.data['password'])
-        reset_password.advertiser.user.save()
+        new_password = ResetPassword.objects.filter(token=token)
+        new_password.advertiser.user.set_password(form.data['password'])
+        new_password.advertiser.user.save()
         return redirect('home')
-
 
 
 def advertisement_detail(request, advertisement_id):
