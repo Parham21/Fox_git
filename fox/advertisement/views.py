@@ -134,7 +134,7 @@ def change_password(request):
 def advertisement_detail(request, advertisement_id):
     try:
         advertisement = Advertisement.objects.get(pk=advertisement_id)
-        return render(request, '../templates/advertisement_page.html', {
+        return render(request, '../templates/ad_detail.html', {
             'advertisement': advertisement
         })
     except Advertisement.DoesNotExist:
