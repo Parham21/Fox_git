@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from advertisement.models import Advertisement, Advertiser, ResetPassword
 from advertisement.utils import send_email_async
 from .forms import SearchForm, AddAdvertisementForm, LoginForm, ResetPassForm, AddAdvertiserForm
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 
 def search(request):
@@ -64,6 +64,10 @@ def login_view(request):
         else:
             return render(request, '../templates/login.html', {'form': form})
 
+
+def logout_view(request):
+    logout(request)
+    return redirect('home')
 
 def register(request):
     if request.method == 'GET':

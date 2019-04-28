@@ -6,10 +6,11 @@ from fox import settings
 from advertisement import views
 
 urlpatterns = [
-    path('', views.home),
-    path('login', views.login_view),
-    path('register', views.register),
-    path('reset_password', views.reset_password),
+    path('', views.home, name='home'),
+    path('login', views.login_view, name='login'),
+    path('logout', views.logout_view, name='logout'),
+    path('register', views.register, name='register'),
+    path('reset_password', views.reset_password, name='reset_password'),
     path('advertisement/', include('advertisement.urls')),
     path('admin/', admin.site.urls),
 ]
