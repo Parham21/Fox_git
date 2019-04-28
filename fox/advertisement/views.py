@@ -1,4 +1,6 @@
 from django.core.mail import EmailMessage
+from django.http import Http404
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 
@@ -104,3 +106,12 @@ def reset_password(request):
                 'form': form,
                 'error': 'No user with this email address'
             })
+
+def advertisement_detail(request, advertisement_id):
+    try:
+        advertisement = Advertisement.objects.get(pk=advertisement_id)
+        return render(request, '../templates/advertisement_page.html', {
+            'advertisement': advertisement
+        })
+    except Advertisement.DoesNotExist:
+        raise Http404("Question does not exist")
