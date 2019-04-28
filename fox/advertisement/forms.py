@@ -124,8 +124,7 @@ class SubmitPassword(forms.Form):
         cleaned_data = super(SubmitPassword, self).clean()
         password = cleaned_data.get("password")
         confirm_password = cleaned_data.get("confirm_password")
-
         if password != confirm_password:
-            raise forms.ValidationError(
-                "password and confirm_password does not match"
-            )
+            self._errors['password'] = 'passwords does not match.'
+
+        return cleaned_data

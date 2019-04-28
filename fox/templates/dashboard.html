@@ -34,7 +34,7 @@
                 <a href="javascript:void(0);" data-title="Settings">Settings</a>
             </li>
             <li>
-                <a href="http://127.0.0.1:8000/" data-title="Logout">Logout</a>
+                <a href="{% url 'logout' %}" data-title="Logout">Logout</a>
             </li>
 
         </ul>
@@ -43,7 +43,7 @@
 <main>
     <div class="title">
         <h2>My Profile</h2>
-        <a href="javascript:void(0);">Hello Username!</a>
+        <a href="javascript:void(0);">Hello {{ request.user.username }}!</a>
     </div>
 </main>
 
