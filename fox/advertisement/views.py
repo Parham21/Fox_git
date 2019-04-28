@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.core.mail import EmailMessage
 from django.http import Http404
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 
@@ -118,10 +119,16 @@ def change_password(request):
     else:
         form = SubmitPassword(request.POST)
         token = request.GET.get('token')
-        new_password = ResetPassword.objects.filter(token=token)
-        new_password.advertiser.user.set_password(form.data['password'])
-        new_password.advertiser.user.save()
-        return redirect('home')
+        if form.is_valid():
+            new_password = ResetPassword.objects.filter(token=token)[0]
+            new_password.advertiser.user.set_password(form.data['password'])
+            new_password.advertiser.user.save()
+            return redirect('home')
+        else:
+            return render(request, '../templates/change_password.html', {'form': form})
+
+
+
 
 
 def advertisement_detail(request, advertisement_id):
