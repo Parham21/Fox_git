@@ -7,7 +7,7 @@ from django.template.loader import render_to_string
 
 from advertisement.models import Advertisement, Advertiser, ResetPassword
 from advertisement.utils import send_email_async
-from .forms import SearchForm, AddAdvertisementForm, LoginForm, ResetPassForm, AddAdvertiserForm
+from .forms import SearchForm, AddAdvertisementForm, LoginForm, ResetPassForm, AddAdvertiserForm, SubmitPassword
 from django.contrib.auth import authenticate, login, logout
 
 
@@ -102,13 +102,26 @@ def reset_password(request):
             })
             email = EmailMessage(subject=subject, body=body, to=[advertiser.email])
             send_email_async(email)
-            messages.info(request, 'An email has been send for you!')
             return redirect('home')
         except Advertiser.DoesNotExist:
             return render(request, '../templates/forget_password.html', {
                 'form': form,
                 'error': 'No user with this email address'
             })
+
+def change_password(request):
+    if request.method == 'GET':
+        form = SubmitPassword()
+        return render(request, '../templates/change_password.html', {'form': form})
+    else:
+        form = SubmitPassword(request.POST)
+        token = request.GET.get('token')
+        reset_password = ResetPassword.objects.filter(token=token)
+        reset_password.advertiser.user.set_password(form.data['password'])
+        reset_password.advertiser.user.save()
+        return redirect('home')
+
+
 
 def advertisement_detail(request, advertisement_id):
     try:

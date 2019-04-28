@@ -62,6 +62,6 @@ class ResetPassword(models.Model):
     token = models.CharField(max_length=32, default=generate_random_token)
 
     def get_reset_password_link(self):
-        return "{}/reset_password.html?token={}".format(settings.SITE_DOMAIN, self.token)
+        return "{}/change_password?token={}".format(settings.SITE_DOMAIN, self.token)
 
 

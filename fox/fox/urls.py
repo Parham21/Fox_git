@@ -11,6 +11,7 @@ urlpatterns = [
     path('logout', views.logout_view, name='logout'),
     path('register', views.register, name='register'),
     path('reset_password', views.reset_password, name='reset_password'),
+    path('change_password', views.change_password, name='change_password'),
     path('advertisement/', include('advertisement.urls')),
     path('admin/', admin.site.urls),
 ]

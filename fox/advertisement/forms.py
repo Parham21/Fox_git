@@ -107,3 +107,24 @@ class ResetPassForm(forms.Form):
         self.fields['email'].widget.attrs['placeholder'] = 'email'
         self.fields['email'].widget.attrs['class'] = 'form-control '
 
+class SubmitPassword(forms.Form):
+    password=forms.CharField(widget=forms.PasswordInput())
+    confirm_password=forms.CharField(widget=forms.PasswordInput())
+
+    def __init__(self, *args, **kwargs):
+        super(SubmitPassword, self).__init__(*args, **kwargs)
+        self.fields['password'].widget.attrs['placeholder'] = 'password'
+        self.fields['password'].widget.attrs['class'] = 'form-control '
+
+        self.fields['confirm_password'].widget.attrs['placeholder'] = 'confirm_password'
+        self.fields['confirm_password'].widget.attrs['class'] = 'form-control '
+
+    def clean(self):
+        cleaned_data = super(SubmitPassword, self).clean()
+        password = cleaned_data.get("password")
+        confirm_password = cleaned_data.get("confirm_password")
+
+        if password != confirm_password:
+            raise forms.ValidationError(
+                "password and confirm_password does not match"
+            )
