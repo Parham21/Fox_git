@@ -6,17 +6,28 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 
-from advertisement.models import Advertisement, Advertiser, ResetPassword
+from advertisement.models import Advertisement, Advertiser, ResetPassword, Category
 from advertisement.utils import send_email_async
 from .forms import SearchForm, AddAdvertisementForm, LoginForm, ResetPassForm, AddAdvertiserForm, SubmitPassword
 from django.contrib.auth import authenticate, login, logout
 
 
 def search(request):
+    categories = Category.objects.all()
+    query_category = request.GET.get('category')
+    if query_category is not None:
+        categories = [query_category]
+        for category in Category.objects.all():
+            if category.parent is not None:
+                if category.parent == query_category:
+                    categories.append(category)
+                if category.parent.parent is not None and category.parent.parent == query_category:
+                    categories.append(category)
     if request.method == 'GET':
         form = SearchForm()
-        ads = Advertisement.objects.all()
+        ads = Advertisement.objects.filter(category_id=categories.values('id'))
         return render(request, '../templates/search.html', {
+            'categories': categories,
             'ads': ads,
             'form': form
         })
@@ -24,7 +35,7 @@ def search(request):
         form = SearchForm(request.POST)
         if form.is_valid():
             title = form.cleaned_data['title']
-            ads = Advertisement.objects.filter(title__contains=title)
+            ads = Advertisement.objects.filter(category_id=categories.values('id'), title__contains=title)
             return render(request, '../templates/search.html', {
                 'ads': ads,
                 'form': form
@@ -138,4 +149,4 @@ def advertisement_detail(request, advertisement_id):
             'advertisement': advertisement
         })
     except Advertisement.DoesNotExist:
-        raise Http404("Question does not exist")
+        raise Http404("Advertisement does not exist")

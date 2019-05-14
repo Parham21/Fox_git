@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 
-from advertisement.models import Advertisement, Advertiser
+from advertisement.models import Advertisement, Advertiser, Category
 from advertisement.validators import phone_validator, string_check
 from django.contrib.auth.models import User
 
@@ -27,6 +27,7 @@ class AddAdvertisementForm(ModelForm):
         self.fields['price'].widget.attrs['class'] = 'form-control '
         self.fields['phone'].widget.attrs['class'] = 'form-control '
         self.fields['description'].widget.attrs['class'] = 'form-control '
+        self.fields['category'].queryset = Category.objects.exclude(id__in=Category.objects.all().values('parent_id'))
 
     def clean(self):
         data = self.cleaned_data

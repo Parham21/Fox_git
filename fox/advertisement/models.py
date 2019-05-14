@@ -18,6 +18,7 @@ class Advertisement(models.Model):
     phone = models.CharField(max_length=12)
     description = models.TextField()
     profile_image = models.ImageField(upload_to=get_image_path, default='../static/default.jpg')
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, null=True)
 
     area = models.ForeignKey('Area', on_delete=models.CASCADE)
     advertiser = models.ForeignKey('Advertiser', on_delete=models.CASCADE)
@@ -63,5 +64,14 @@ class ResetPassword(models.Model):
 
     def get_reset_password_link(self):
         return "{}/change_password?token={}".format(settings.SITE_DOMAIN, self.token)
+
+
+
+class Category(models.Model):
+    title = models.CharField(max_length=50)
+    parent = models.ForeignKey('self', null=True, on_delete=models.CASCADE, blank=True)
+
+    def __str__(self):
+        return self.title
 
 
