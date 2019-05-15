@@ -6,9 +6,11 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 
+from advertisement.constant import ADMIN_MAILS
 from advertisement.models import Advertisement, Advertiser, ResetPassword, Category
 from advertisement.utils import send_email_async
-from .forms import SearchForm, AddAdvertisementForm, LoginForm, ResetPassForm, AddAdvertiserForm, SubmitPassword
+from .forms import SearchForm, AddAdvertisementForm, LoginForm, ResetPassForm, AddAdvertiserForm, SubmitPassword, \
+    ReportForm
 from django.contrib.auth import authenticate, login, logout
 
 
@@ -163,10 +165,12 @@ def advertisement_detail(request, advertisement_id):
     try:
         advertisement = Advertisement.objects.get(pk=advertisement_id)
         related_ads = Advertisement.objects.filter(category=advertisement.category, area=advertisement.area)
+        form = ReportForm()
         return render(request, '../templates/ad_detail.html', {
             'advertisement': advertisement,
             'related_ads': related_ads,
-            'link': request.build_absolute_uri()
+            'link': request.build_absolute_uri(),
+            'form': form
         })
     except Advertisement.DoesNotExist:
         raise Http404("Advertisement does not exist")
@@ -186,3 +190,20 @@ def add_favorite_advertisement(request, advertisement_id):
     advertiser.favorites_ads.add(advertisement)
     advertiser.save()
     return redirect('advertisement_detail', advertisement_id=advertisement_id)
+
+
+def report_advertisement(request, advertisement_id):
+    form = ReportForm(request.POST)
+    if form.is_valid():
+        advertisement = Advertisement.objects.filter(pk=advertisement_id)
+        description = form.cleaned_data['description']
+        subject = 'Report Advertisement'
+        body = render_to_string('report_template', context={
+            'advertisement_title': advertisement.title,
+            'description': description
+        })
+        email = EmailMessage(subject=subject, body=body, to=ADMIN_MAILS)
+        send_email_async(email)
+        return redirect('advertisement_detail', advertisement_id=advertisement_id)
+    else:
+        return redirect('advertisement_detail', advertisement_id=advertisement_id)

@@ -1,0 +1,8 @@
+Dear Admin
+
+A report for Advertisement {{ advertisement_title }} has been submitted. Here is the description:
+
+{{ description }}
+
+Best wishes,
+Fox Corporation
