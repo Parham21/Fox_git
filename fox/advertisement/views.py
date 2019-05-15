@@ -170,3 +170,19 @@ def advertisement_detail(request, advertisement_id):
         })
     except Advertisement.DoesNotExist:
         raise Http404("Advertisement does not exist")
+
+
+def favorite_advertisement(request):
+    advertiser = Advertiser.objects.filter(user=request.user)
+    favorite_ads = advertiser.favorite_ads.all()
+    return render(request, '../templates/favorite_ads.html', {
+        'favorite_ads': favorite_ads
+    })
+
+
+def add_favorite_advertisement(request, advertisement_id):
+    advertiser = Advertiser.objects.filter(user=request.user)
+    advertisement = Advertisement.objects.filter(pk=advertisement_id)
+    advertiser.favorites_ads.add(advertisement)
+    advertiser.save()
+    return redirect('advertisement_detail', advertisement_id=advertisement_id)

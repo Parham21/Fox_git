@@ -36,6 +36,7 @@ class Advertiser(models.Model):
     sex = models.CharField(max_length=1, choices=SEX_CHOICES)
     age = models.IntegerField()
 
+    favorite_ads = models.ManyToManyField(Advertisement, related_name='interested_advertiser')
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
