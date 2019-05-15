@@ -145,3 +145,7 @@ class SubmitPassword(forms.Form):
             self._errors['password'] = 'passwords does not match.'
 
         return cleaned_data
+
+
+class ReportForm(forms.Form):
+    description = forms.Textarea()
