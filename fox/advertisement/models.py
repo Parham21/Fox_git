@@ -19,6 +19,7 @@ class Advertisement(models.Model):
     description = models.TextField()
     profile_image = models.ImageField(upload_to=get_image_path, default='../static/default.jpg')
     category = models.ForeignKey('Category', on_delete=models.CASCADE, null=True)
+    immediate = models.BooleanField()
 
     area = models.ForeignKey('Area', on_delete=models.CASCADE)
     advertiser = models.ForeignKey('Advertiser', on_delete=models.CASCADE)

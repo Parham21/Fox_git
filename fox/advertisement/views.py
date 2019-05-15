@@ -13,19 +13,23 @@ from django.contrib.auth import authenticate, login, logout
 
 
 def search(request):
-    categories = Category.objects.all()
     query_category = request.GET.get('category')
     if query_category is not None:
         categories = [query_category]
         for category in Category.objects.all():
             if category.parent is not None:
                 if category.parent == query_category:
-                    categories.append(category)
+                    categories.append(category.id)
                 if category.parent.parent is not None and category.parent.parent == query_category:
-                    categories.append(category)
+                    categories.append(category.id)
+    else:
+        categories = []
+        for category in Category.objects.all():
+            if category.parent is not None and category.parent.parent is not None:
+                categories.append(category.id)
     if request.method == 'GET':
         form = SearchForm()
-        ads = Advertisement.objects.filter(category_id=categories.values('id'))
+        ads = Advertisement.objects.filter(category_id__in=categories)
         return render(request, '../templates/search.html', {
             'categories': categories,
             'ads': ads,
@@ -34,8 +38,24 @@ def search(request):
     else:
         form = SearchForm(request.POST)
         if form.is_valid():
-            title = form.cleaned_data['title']
-            ads = Advertisement.objects.filter(category_id=categories.values('id'), title__contains=title)
+            query_params = dict()
+            if form.cleaned_data['title'] is not None:
+                query_params['title'] = form.cleaned_data['title']
+            if form.cleaned_data['immediate'] is not None and form.cleaned_data['immediate'] is True:
+                query_params['immediate'] = form.cleaned_data['immediate']
+            if form.cleaned_data['area'] is not None:
+                query_params['area'] = form.cleaned_data['area']
+            ads = Advertisement.objects.filter(category_id__in=categories)
+            ads = ads.filter(**query_params)
+            minimum_price = 0
+            maximum_price = 100000000000
+            if form.cleaned_data['minimum_price'] is not None:
+                minimum_price = form.cleaned_data['minimum_price']
+            if form.cleaned_data['maximum_price'] is not None:
+                minimum_price = form.cleaned_data['maximum_price']
+            ads.filter(price__range=(minimum_price, maximum_price))
+            if form.cleaned_data['has_image'] is not None and form.cleaned_data['has_image'] is True:
+                ads.exclude(image='../static/default.jpg')
             return render(request, '../templates/search.html', {
                 'ads': ads,
                 'form': form
