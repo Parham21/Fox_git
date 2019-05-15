@@ -159,14 +159,13 @@ def change_password(request):
             return render(request, '../templates/change_password.html', {'form': form})
 
 
-
-
-
 def advertisement_detail(request, advertisement_id):
     try:
         advertisement = Advertisement.objects.get(pk=advertisement_id)
+        related_ads = Advertisement.objects.filter(category=advertisement.category, area=advertisement.area)
         return render(request, '../templates/ad_detail.html', {
-            'advertisement': advertisement
+            'advertisement': advertisement,
+            'related_ads': related_ads
         })
     except Advertisement.DoesNotExist:
         raise Http404("Advertisement does not exist")
