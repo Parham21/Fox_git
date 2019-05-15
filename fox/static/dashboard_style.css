@@ -151,22 +151,26 @@ header nav ul li:first-child a:before {
 }
 
 header nav ul li:nth-child(2) a:before {
-    content: "\FF0B";
+    content: "\2665";
 }
 
 header nav ul li:nth-child(3) a:before {
-    content: "\1f50d";
+    content: "\FF0B";
 }
 
 header nav ul li:nth-child(4) a:before {
-    content: "\e771";
+    content: "\1f50d";
 }
 
 header nav ul li:nth-child(5) a:before {
-    content: "\2699";
+    content: "\e771";
 }
 
 header nav ul li:nth-child(6) a:before {
+    content: "\2699";
+}
+
+header nav ul li:nth-child(7) a:before {
     content: "\E741";
 }
 
