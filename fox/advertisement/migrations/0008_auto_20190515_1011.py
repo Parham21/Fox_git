@@ -1,0 +1,85 @@
+from django.db import migrations
+
+from advertisement.models import *
+
+
+def fill_data(apps, schema_editor):
+    vehicle = Category(title='Vehicle')
+    vehicle.save()
+    car = Category(title='Car', parent=vehicle)
+    car.save()
+    bicycle = Category(title='Bicycle', parent=vehicle)
+    bicycle.save()
+    motorcycle = Category(title='Motorcycle', parent=vehicle)
+    motorcycle.save()
+    bmw = Category(title='BMW', parent=car)
+    bmw.save()
+    ford = Category(title='Ford', parent=car)
+    ford.save()
+    nissan = Category(title='Nissan', parent=car)
+    nissan.save()
+    pinarello = Category(title='Pinarello', parent=bicycle)
+    pinarello.save()
+    gt = Category(title='GT Bicycle', parent=bicycle)
+    gt.save()
+    yamaha = Category(title='Yamaha', parent=motorcycle)
+    yamaha.save()
+    honda = Category(title='Honda', parent=motorcycle)
+    honda.save()
+    suzuki = Category(title='Suzuki', parent=motorcycle)
+    suzuki.save()
+    estate = Category(title='Estate')
+    estate.save()
+    house = Category(title='House', parent=estate)
+    house.save()
+    land = Category(title='Land', parent=estate)
+    land.save()
+    vila = Category(title='Vila', parent=house)
+    vila.save()
+    apartment = Category(title='Apartment', parent=house)
+    apartment.save()
+    farm = Category(title='Farm', parent=land)
+    farm.save()
+    non_agricultural_land = Category(title='Non Agricultural Land', parent=land)
+    non_agricultural_land.save()
+    electronic_devices = Category(title='Electronic Devices')
+    electronic_devices.save()
+    mobile = Category(title='Mobile', parent=electronic_devices)
+    mobile.save()
+    laptop = Category(title='Laptop', parent=electronic_devices)
+    laptop.save()
+    tv = Category(title='TV', parent=electronic_devices)
+    tv.save()
+    iphone = Category(title='iphone', parent=mobile)
+    iphone.save()
+    samsung = Category(title='Samsung', parent=mobile)
+    samsung.save()
+    htc = Category(title='HTC', parent=mobile)
+    htc.save()
+    huawei = Category(title='Huawi', parent=mobile)
+    huawei.save()
+    asus = Category(title='Asus', parent=laptop)
+    asus.save()
+    apple = Category(title='Apple', parent=laptop)
+    apple.save()
+    lenovo = Category(title='Lenovo', parent=laptop)
+    lenovo.save()
+    acer = Category(title='Acer', parent=laptop)
+    acer.save()
+    sony = Category(title='Sony', parent=tv)
+    sony.save()
+    panasonic = Category(title='Panasonic', parent=tv)
+    panasonic.save()
+    lg = Category(title='LG', parent=tv)
+    lg.save()
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ('advertisement', '0007_auto_20190515_1010'),
+    ]
+
+    operations = [
+        migrations.RunPython(fill_data)
+    ]
