@@ -39,14 +39,14 @@ def search(request):
         form = SearchForm(request.POST)
         if form.is_valid():
             query_params = dict()
-            if form.cleaned_data['title'] is not None:
-                query_params['title'] = form.cleaned_data['title']
             if form.cleaned_data['immediate'] is not None and form.cleaned_data['immediate'] is True:
                 query_params['immediate'] = form.cleaned_data['immediate']
             if form.cleaned_data['area'] is not None:
                 query_params['area'] = form.cleaned_data['area']
             ads = Advertisement.objects.filter(category_id__in=categories)
             ads = ads.filter(**query_params)
+            if form.cleaned_data['title'] is not None:
+                ads = ads.filter(title__contains=form.cleaned_data['title'])
             minimum_price = 0
             maximum_price = 100000000000
             if form.cleaned_data['minimum_price'] is not None:
@@ -165,7 +165,8 @@ def advertisement_detail(request, advertisement_id):
         related_ads = Advertisement.objects.filter(category=advertisement.category, area=advertisement.area)
         return render(request, '../templates/ad_detail.html', {
             'advertisement': advertisement,
-            'related_ads': related_ads
+            'related_ads': related_ads,
+            'link': request.build_absolute_uri()
         })
     except Advertisement.DoesNotExist:
         raise Http404("Advertisement does not exist")
