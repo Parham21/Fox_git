@@ -12,11 +12,13 @@ class SearchForm(forms.Form):
                                 attrs={'class': 'form-control', 'placeholder': 'Enter the advertisement\'s title'}))
     immediate = forms.BooleanField(label='Immediate', required=False)
     minimum_price = forms.IntegerField(label='Minimum Price', required=False,
-                            widget=forms.TextInput(
-                            attrs={'class': 'form-control', 'placeholder': 'Enter minimum advertisement\'s price'}))
+                                       widget=forms.TextInput(
+                                           attrs={'class': 'form-control',
+                                                  'placeholder': 'Enter minimum advertisement\'s price'}))
     maximum_price = forms.IntegerField(label='Maximum Price', required=False,
-                            widget=forms.TextInput(
-                            attrs={'class': 'form-control', 'placeholder': 'Enter maximum advertisement\'s price'}))
+                                       widget=forms.TextInput(
+                                           attrs={'class': 'form-control',
+                                                  'placeholder': 'Enter maximum advertisement\'s price'}))
     area = forms.ModelChoiceField(label='Area', required=False, queryset=Area.objects.all())
     has_image = forms.BooleanField(label='Has Image', required=False)
 
@@ -27,6 +29,7 @@ class SearchForm(forms.Form):
         if minimum_price is not None and maximum_price is not None and minimum_price > maximum_price:
             self._errors['minimum_price'] = 'Minimum price should be bigger than maximum price'
         return cleaned_data
+
 
 class AddAdvertisementForm(ModelForm):
     class Meta:

@@ -27,13 +27,55 @@ def search(request):
                 categories.append(category.id)
     ads_categories = []
     for category in Category.objects.all():
-        if CATEGORY_LAYER[category.title] == 3 and (category.id in categories or category.parent.id in categories or category.parent.parent.id in categories):
+        if CATEGORY_LAYER[category.title] == 3 and (
+                category.id in categories or category.parent.id in categories or category.parent.parent.id in categories):
             ads_categories.append(category.id)
     if request.method == 'GET':
         form = SearchForm()
         ads = Advertisement.objects.filter(category_id__in=ads_categories)
         categories = Category.objects.filter(id__in=categories)
         return render(request, '../templates/search.html', {
+            'categories': categories,
+            'ads': ads,
+            'form': form
+        })
+    else:
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            ads = Advertisement.objects.filter(category_id__in=ads_categories)
+            if form.cleaned_data['title'] is not None:
+                ads = ads.filter(title__contains=form.cleaned_data['title'])
+            categories = Category.objects.filter(id__in=categories)
+            return render(request, '../templates/search.html', {
+                'categories': categories,
+                'ads': ads,
+                'form': form
+            })
+        else:
+            return render(request, '../templates/search.html', {'form': form})
+
+
+def adv_search(request):
+    query_category = request.GET.get('category')
+
+    categories = []
+    for category in Category.objects.all():
+        if CATEGORY_LAYER[query_category] == 3:
+            if category.title == query_category:
+                categories.append(category.id)
+        elif CATEGORY_LAYER[category.title] == CATEGORY_LAYER[query_category] + 1:
+            if query_category is None and category.parent is None or category.parent.title == query_category:
+                categories.append(category.id)
+    ads_categories = []
+    for category in Category.objects.all():
+        if CATEGORY_LAYER[category.title] == 3 and (
+                category.id in categories or category.parent.id in categories or category.parent.parent.id in categories):
+            ads_categories.append(category.id)
+    if request.method == 'GET':
+        form = SearchForm()
+        ads = Advertisement.objects.filter(category_id__in=ads_categories)
+        categories = Category.objects.filter(id__in=categories)
+        return render(request, '../templates/advanced_search.html', {
             'categories': categories,
             'ads': ads,
             'form': form
@@ -60,13 +102,13 @@ def search(request):
             if form.cleaned_data['has_image'] is not None and form.cleaned_data['has_image'] is True:
                 ads.exclude(image='../static/default.jpg')
             categories = Category.objects.filter(id__in=categories)
-            return render(request, '../templates/search.html', {
+            return render(request, '../templates/advanced_search.html', {
                 'categories': categories,
                 'ads': ads,
                 'form': form
             })
         else:
-            return render(request, '../templates/search.html', {'form': form})
+            return render(request, '../templates/advanced_search.html', {'form': form})
 
 
 def add_advertisement(request):
