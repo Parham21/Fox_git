@@ -12,6 +12,7 @@ from advertisement.utils import send_email_async
 from .forms import SearchForm, AddAdvertisementForm, LoginForm, ResetPassForm, AddAdvertiserForm, SubmitPassword, \
     ReportForm
 from django.contrib.auth import authenticate, login, logout
+from django.db.models import Q
 
 
 def search(request):
@@ -98,9 +99,9 @@ def adv_search(request):
                 minimum_price = form.cleaned_data['minimum_price']
             if form.cleaned_data['maximum_price'] is not None:
                 maximum_price = form.cleaned_data['maximum_price']
-            ads.filter(price__range=(minimum_price, maximum_price))
+            ads = ads.filter(price__range=(minimum_price, maximum_price))
             if form.cleaned_data['has_image'] is not None and form.cleaned_data['has_image'] is True:
-                ads.exclude(image='../static/default.jpg')
+                ads.exclude(profile_image='../static/default.jpg')
             categories = Category.objects.filter(id__in=categories)
             return render(request, '../templates/advanced_search.html', {
                 'categories': categories,
