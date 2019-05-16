@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 
-from advertisement.constant import ADMIN_MAILS
+from advertisement.constant import ADMIN_MAILS, CATEGORY_LAYER
 from advertisement.models import Advertisement, Advertiser, ResetPassword, Category
 from advertisement.utils import send_email_async
 from .forms import SearchForm, AddAdvertisementForm, LoginForm, ResetPassForm, AddAdvertiserForm, SubmitPassword, \
@@ -16,18 +16,11 @@ from django.contrib.auth import authenticate, login, logout
 
 def search(request):
     query_category = request.GET.get('category')
-    if query_category is not None:
-        categories = [query_category]
-        for category in Category.objects.all():
-            if category.parent is not None:
-                if category.parent == query_category:
-                    categories.append(category.id)
-                if category.parent.parent is not None and category.parent.parent == query_category:
-                    categories.append(category.id)
-    else:
-        categories = []
-        for category in Category.objects.all():
-            if category.parent is not None and category.parent.parent is not None:
+
+    categories = []
+    for category in Category.objects.all():
+        if CATEGORY_LAYER[category.title] == CATEGORY_LAYER[query_category] + 1:
+            if query_category is None and category.parent is None or category.parent.title == query_category:
                 categories.append(category.id)
     if request.method == 'GET':
         form = SearchForm()
