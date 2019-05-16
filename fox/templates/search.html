@@ -16,7 +16,7 @@
 <div class="grid">
     <div class="row"></div>
     <div class="row">
-        <div class="col-xs-10 col-md-8 col-lg-8 col-sm-8 offset-xs-1 offset-md-2 offset-lg-2 offset-sm-2 the-box">
+        <div class="col-xs-10 col-md-10 col-lg-10 col-sm-10 offset-xs-1 offset-md-1 offset-lg-1 offset-sm-1 the-box">
             <div class="well bs-component">
                 <form method="post" class="form-horizontal">
                     {% csrf_token %}
@@ -35,17 +35,26 @@
                 </form>
             </div>
         </div>
-        <div class="col-xs-10 col-md-8 col-lg-8 col-sm-8 offset-xs-1 offset-md-2 offset-lg-2 offset-sm-2 the-box
+        <div class="col-xs-2 col-sm-3 col-md-3 col-lg-3 offset-xs-1 offset-md-1 offset-lg-1 offset-sm-1 the-box list-group table-of-contents"
+             style="margin-top: 30px; margin-right: 10px">
+            {% for cat in categories %}
+                <div style="color:black" class="list-group-item" onclick="location.href='{% url 'search' %}?category={{ cat.title }}'">
+                    {{ cat.title }}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="col-xs-8 col-md-7 col-lg-7 col-sm-7 the-box
                 list-group table-of-contents" style="margin-top: 30px">
             {% for ad in ads %}
-                <div class="list-group-item" onclick="">
+                <div style="color:black" class="list-group-item"
+                     onclick="location.href='{% url 'advertisement_detail' ad.id %}'">
                     <div style="display: flex; justify-content: space-between">
                         <div style="float: left; flex-grow: 1" class="search-res">
                             <img style="width: 80px; height: 80px" alt="ad-image" src='/media/{{ ad.profile_image }}'/>
                             <h2>{{ ad.title }}</h2>
                             <h6>advertiser: {{ ad.advertiser }}</h6>
                             <h6>area: {{ ad.area }}</h6>
-                            <h6><a href={% url 'advertisement_detail' ad.id %}>See more</a></h6>
+                            <br>
                         </div>
                         <p style="float: right; margin: auto 10px; font-size: 25px; font-weight: bold">{{ ad.price }}</p>
                     </div>

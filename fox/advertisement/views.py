@@ -19,7 +19,10 @@ def search(request):
 
     categories = []
     for category in Category.objects.all():
-        if CATEGORY_LAYER[category.title] == CATEGORY_LAYER[query_category] + 1:
+        if CATEGORY_LAYER[query_category] == 3:
+            if category.title == query_category:
+                categories.append(category.id)
+        elif CATEGORY_LAYER[category.title] == CATEGORY_LAYER[query_category] + 1:
             if query_category is None and category.parent is None or category.parent.title == query_category:
                 categories.append(category.id)
     ads_categories = []
@@ -52,7 +55,7 @@ def search(request):
             if form.cleaned_data['minimum_price'] is not None:
                 minimum_price = form.cleaned_data['minimum_price']
             if form.cleaned_data['maximum_price'] is not None:
-                minimum_price = form.cleaned_data['maximum_price']
+                maximum_price = form.cleaned_data['maximum_price']
             ads.filter(price__range=(minimum_price, maximum_price))
             if form.cleaned_data['has_image'] is not None and form.cleaned_data['has_image'] is True:
                 ads.exclude(image='../static/default.jpg')
