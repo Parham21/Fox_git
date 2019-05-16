@@ -22,9 +22,14 @@ def search(request):
         if CATEGORY_LAYER[category.title] == CATEGORY_LAYER[query_category] + 1:
             if query_category is None and category.parent is None or category.parent.title == query_category:
                 categories.append(category.id)
+    ads_categories = []
+    for category in Category.objects.all():
+        if CATEGORY_LAYER[category.title] == 3 and (category.id in categories or category.parent.id in categories or category.parent.parent.id in categories):
+            ads_categories.append(category.id)
     if request.method == 'GET':
         form = SearchForm()
-        ads = Advertisement.objects.filter(category_id__in=categories)
+        ads = Advertisement.objects.filter(category_id__in=ads_categories)
+        categories = Category.objects.filter(id__in=categories)
         return render(request, '../templates/search.html', {
             'categories': categories,
             'ads': ads,
@@ -38,7 +43,7 @@ def search(request):
                 query_params['immediate'] = form.cleaned_data['immediate']
             if form.cleaned_data['area'] is not None:
                 query_params['area'] = form.cleaned_data['area']
-            ads = Advertisement.objects.filter(category_id__in=categories)
+            ads = Advertisement.objects.filter(category_id__in=ads_categories)
             ads = ads.filter(**query_params)
             if form.cleaned_data['title'] is not None:
                 ads = ads.filter(title__contains=form.cleaned_data['title'])
@@ -51,7 +56,9 @@ def search(request):
             ads.filter(price__range=(minimum_price, maximum_price))
             if form.cleaned_data['has_image'] is not None and form.cleaned_data['has_image'] is True:
                 ads.exclude(image='../static/default.jpg')
+            categories = Category.objects.filter(id__in=categories)
             return render(request, '../templates/search.html', {
+                'categories': categories,
                 'ads': ads,
                 'form': form
             })
