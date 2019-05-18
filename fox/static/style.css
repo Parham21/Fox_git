@@ -1,7 +1,7 @@
 body {
-    padding-top: 80px;
+    margin: 0;
     padding-bottom: 80px;
-    background-image: url("bg2.jpg") ;
+    background-image: url("bg2.jpg");
     background-size: cover;
     background-attachment: fixed;
 }
@@ -46,22 +46,22 @@ legend {
 }
 
 .search-res img {
-  float: left;
-  width: 100px;
-  height: 100px;
-  background: #555;
+    float: left;
+    width: 100px;
+    height: 100px;
+    background: #555;
 }
 
 .search-res h2 {
-  position: relative;
-  top: 18px;
-  left: 10px;
+    position: relative;
+    top: 18px;
+    left: 10px;
 }
 
 .search-res h6 {
-  position: relative;
-  top: 18px;
-  left: 10px;
+    position: relative;
+    top: 18px;
+    left: 10px;
 }
 
 .fox-navbar {
@@ -87,6 +87,95 @@ legend {
     color: #1da1f2;
     font-size: 23px;
     margin-right: 750px;
+}
+
+.header {
+    z-index: 100;
+    /*width: 100%;*/
+    display: flex;
+    margin-bottom: 30px;
+    /*right:0;*/
+}
+
+.header .head {
+    text-align: center;
+    font-weight: normal;
+    color: #f6f6ef;
+    margin: 0;
+    padding: 10px;
+    font-size: 20px;
+    letter-spacing: 1px;
+    background-color: #34363a;
+    border-bottom: 1px solid rgba(101, 116, 134, 0.57);
+    float: left;
+    flex-grow: 0;
+}
+
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+.title {
+    background-color: #fff;
+    border-bottom: 1px solid #c0c1c0;
+    float: right;
+    flex-grow: 1;
+    flex-direction: column;
+}
+
+.title > a {
+    color: #aaa;
+    width: auto;
+    margin: -10px 20px 0 0;
+    position: relative;
+    float: right;
+    text-decoration: none;
+    transition: all 0.5s;
+}
+
+.title .avat:before {
+    content: "\A19C";
+    font-size: 38px;
+}
+
+.dropdown:hover {
+    background: #dddddd;
+    color: #33526b;
+    transition: all 0.5s;
+}
+
+.dropdown {
+    position: relative;
+    float: right;
+    padding: 0 12px;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    right: 0;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
 }
 
 .google-button {
@@ -298,6 +387,7 @@ legend {
 .follow-header {
     margin-bottom: 20px;
 }
+
 .input-search {
     font-size: 13px;
 }
@@ -499,5 +589,3 @@ legend {
 .content-panel li {
     min-height: 70px;
 }
-
-

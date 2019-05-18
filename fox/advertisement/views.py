@@ -143,7 +143,7 @@ def login_view(request):
         user = authenticate(request, username=form['username'].value(), password=form['password'].value())
         if user is not None:
             login(request, user)
-            return redirect('dashboard')
+            return redirect('search')
         else:
             return render(request, '../templates/login.html', {'form': form})
 
@@ -161,7 +161,7 @@ def register(request):
         form = AddAdvertiserForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('dashboard')
+            return redirect('search')
         else:
             return render(request, '../templates/register.html', {'form': form})
 

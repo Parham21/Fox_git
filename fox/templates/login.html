@@ -13,6 +13,32 @@
     <link rel="icon" href="{% static 'favicon.ico' %}">
 </head>
 <body>
+
+<div class="header" id="myHeader">
+    <div class="head">Fox Advertisement</div>
+    <div class="title">
+        <div class="dropdown">
+            {% if request.user.is_authenticated %}
+                <a class="avat">Hello {{ request.user.username }}!</a>
+                <div class="dropdown-content">
+                    <a href="javascript:void(0);" data-title="Profile">My Profile</a>
+                    <a href="javascript:void(0);" data-title="Favorites">Saved Ads</a>
+                    <a href="http://127.0.0.1:8000/advertisement/add_advertisement" data-title="Submit">Submit Ads.</a>
+                    <a href="http://127.0.0.1:8000/advertisement/search" data-title="Search">Search Ads.</a>
+                    <a href="javascript:void(0);" data-title="Timeline">Timeline</a>
+                    <a href="javascript:void(0);" data-title="Settings">Settings</a>
+                    <a href="{% url 'logout' %}" data-title="Logout">Logout</a>
+                </div>
+            {% else %}
+                <a class="avat">Hello Guest!</a>
+                <div class="dropdown-content">
+                    <a href="http://127.0.0.1:8000/">Login Or Register</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
 <div class="grid">
     <div class="row"></div>
     <div class="row">
@@ -45,5 +71,22 @@
         </div>
     </div>
 </div>
+
+<script>
+    window.onscroll = function () {
+        myFunction()
+    };
+
+    var header = document.getElementById("myHeader");
+    var sticky = header.offsetTop;
+
+    function myFunction() {
+        if (window.pageYOffset > sticky) {
+            header.classList.add("sticky");
+        } else {
+            header.classList.remove("sticky");
+        }
+    }
+</script>
 </body>
 </html>
