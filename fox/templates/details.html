@@ -57,6 +57,27 @@
                 </div>
 
                 </div>
+
+            <div class="row">
+                <div class="col-xs-8 col-md-7 col-lg-7 col-sm-7 the-box
+                list-group table-of-contents" style="margin-top: 30px; margin-left: 10px">
+            {% for ad in ads %}
+                <div style="color:black" class="list-group-item"
+                     onclick="location.href='{% url 'advertisement_detail' ad.id %}'">
+                    <div style="display: flex; justify-content: space-between">
+                        <div style="float: left; flex-grow: 1" class="search-res">
+                            <img style="width: 80px; height: 80px" alt="ad-image" src='/media/{{ ad.profile_image }}'/>
+                            <h2>{{ ad.title }}</h2>
+                            <h6>advertiser: {{ ad.advertiser }}</h6>
+                            <h6>area: {{ ad.area }}</h6>
+                            <br>
+                        </div>
+                        <p style="float: right; margin: auto 10px; font-size: 25px; font-weight: bold">{{ ad.price }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
             </div>
         </div>
     </body>
