@@ -46,7 +46,7 @@ class AddAdvertisementForm(ModelForm):
         self.fields['price'].widget.attrs['class'] = 'form-control '
         self.fields['phone'].widget.attrs['class'] = 'form-control '
         self.fields['description'].widget.attrs['class'] = 'form-control '
-        self.fields['category'].queryset = Category.objects.exclude(id__in=Category.objects.all().values('parent_id'))
+        self.fields['category'].queryset = Category.objects.exclude(id__in=Category.objects.filter(parent__isnull=False).values('parent_id'))
 
     def clean(self):
         data = self.cleaned_data

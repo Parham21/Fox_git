@@ -14,8 +14,7 @@ from .forms import SearchForm, AddAdvertisementForm, LoginForm, ResetPassForm, A
 from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
 
-
-def search(request):
+def get_categories(request):
     query_category = request.GET.get('category')
 
     categories = []
@@ -29,8 +28,14 @@ def search(request):
     ads_categories = []
     for category in Category.objects.all():
         if CATEGORY_LAYER[category.title] == 3 and (
-                category.id in categories or category.parent.id in categories or category.parent.parent.id in categories):
+                            category.id in categories or category.parent.id in categories or category.parent.parent.id in categories):
             ads_categories.append(category.id)
+
+    return categories, ads_categories
+
+
+def search(request):
+    categories, ads_categories = get_categories(request)
     if request.method == 'GET':
         form = SearchForm()
         ads = Advertisement.objects.filter(category_id__in=ads_categories)
@@ -55,23 +60,8 @@ def search(request):
         else:
             return render(request, '../templates/search.html', {'form': form})
 
-
 def adv_search(request):
-    query_category = request.GET.get('category')
-
-    categories = []
-    for category in Category.objects.all():
-        if CATEGORY_LAYER[query_category] == 3:
-            if category.title == query_category:
-                categories.append(category.id)
-        elif CATEGORY_LAYER[category.title] == CATEGORY_LAYER[query_category] + 1:
-            if query_category is None and category.parent is None or category.parent.title == query_category:
-                categories.append(category.id)
-    ads_categories = []
-    for category in Category.objects.all():
-        if CATEGORY_LAYER[category.title] == 3 and (
-                category.id in categories or category.parent.id in categories or category.parent.parent.id in categories):
-            ads_categories.append(category.id)
+    categories, ads_categories = get_categories(request)
     if request.method == 'GET':
         form = SearchForm()
         ads = Advertisement.objects.filter(category_id__in=ads_categories)
@@ -253,3 +243,14 @@ def report_advertisement(request, advertisement_id):
         return redirect('advertisement_detail', advertisement_id=advertisement_id)
     else:
         return redirect('advertisement_detail', advertisement_id=advertisement_id)
+
+
+def my_advertisements(request):
+    return render(request, '../templates/my_advertisement.html', {
+        'ads': Advertisement.objects.filter(advertiser__user=request.user)
+    })
+
+def profile(request):
+    return render(request, '../templates/my_advertisement.html', {
+        'advertiser', Advertiser.objects.filter(user=request.user)[0]
+    })
