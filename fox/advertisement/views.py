@@ -115,11 +115,6 @@ def add_advertisement(request):
         else:
             return render(request, '../templates/add_advertisement.html', {'form': form})
 
-
-def dashboard(request):
-    return render(request, '../templates/dashboard.html')
-
-
 def home(request):
     return render(request, '../templates/home.html')
 
@@ -246,7 +241,7 @@ def report_advertisement(request, advertisement_id):
 
 
 def my_advertisements(request):
-    return render(request, '../templates/my_advertisement.html', {
+    return render(request, '../templates/my_advertisements.html', {
         'ads': Advertisement.objects.filter(advertiser__user=request.user)
     })
 
