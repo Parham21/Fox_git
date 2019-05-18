@@ -1,0 +1,63 @@
+
+
+<!DOCTYPE html>
+
+<html>
+
+{% load staticfiles %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+
+    <title>Details</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link rel="stylesheet" href="{% static 'detail_css.css' %}">
+    <link rel="icon" href="{% static 'favicon.ico' %}">
+
+</head>
+    <body >
+        <div class="container">
+        	<div class="row">
+               <div class="col-xs-4 item-photo">
+                   <img style="max-width:100%;"  src='{{ advertisement.profile_image.url }}' alt="ad image"/>
+                </div>
+                <div class="col-xs-5" style="border:0px solid gray">
+                    <!-- Datos del vendedor y titulo del producto -->
+                    <h3>{{ advertisement.title }}</h3>
+
+                    <!-- Precios -->
+                    <h3 class="title-price"><small>Price</small></h3>
+                    <h5 style="margin-top:0px;">{{ advertisement.price }}</h5>
+
+                    <h3 class="title-price"><small>Details</small></h3>
+                    <h5 style="margin-top:0px;">{{ advertisement.description }}</h5>
+
+                    <!-- Detalles especificos del producto -->
+                    <div class="section">
+                        <h4 class="title-attr" style="margin-top:15px;" ><small>CALL</small></h4>
+                        <h6> {{ advertisement.phone }}</h6>
+                    </div>
+                    <div class="section">
+                        <h4 class="title-attr" style="margin-top:15px;" ><small>City</small></h4>
+                        <h6> {{ advertisement.area.city }}</h6>
+                    </div>
+                     <div class="section">
+                        <h4 class="title-attr" style="margin-top:15px;" ><small>Advertiser</small></h4>
+                        <h6> {{ advertisement.advertiser.first_name }} {{ advertisement.advertiser.last_name }}</h6>
+                    </div>
+                    <div class="section" style="padding-bottom:20px;">
+                        <button class="btn btn-success"><span style="margin-right:20px" class="glyphicon glyphicon-share-alt" aria-hidden="true"></span></button>
+                        <button class="btn btn-primary"><span style="margin-right:20px" class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+
+                    </div>
+
+                </div>
+
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

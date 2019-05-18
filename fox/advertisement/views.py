@@ -202,7 +202,7 @@ def advertisement_detail(request, advertisement_id):
         advertisement = Advertisement.objects.get(pk=advertisement_id)
         related_ads = Advertisement.objects.filter(category=advertisement.category, area=advertisement.area)
         form = ReportForm()
-        return render(request, '../templates/ad_detail.html', {
+        return render(request, '../templates/details.html', {
             'advertisement': advertisement,
             'related_ads': related_ads,
             'link': request.build_absolute_uri(),
