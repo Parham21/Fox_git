@@ -195,11 +195,11 @@ def change_password(request):
 def advertisement_detail(request, advertisement_id):
     try:
         advertisement = Advertisement.objects.get(pk=advertisement_id)
-        related_ads = Advertisement.objects.filter(category=advertisement.category, area=advertisement.area)
+        related_ads = Advertisement.objects.filter(category=advertisement.category, area=advertisement.area).exclude(id=advertisement_id)
         form = ReportForm()
         return render(request, '../templates/details.html', {
             'advertisement': advertisement,
-            'related_ads': related_ads,
+            'ads': related_ads,
             'link': request.build_absolute_uri(),
             'form': form
         })
@@ -208,10 +208,10 @@ def advertisement_detail(request, advertisement_id):
 
 
 def favorite_advertisement(request):
-    advertiser = Advertiser.objects.filter(user=request.user)
+    advertiser = Advertiser.objects.filter(user=request.user)[0]
     favorite_ads = advertiser.favorite_ads.all()
     return render(request, '../templates/favorite_ads.html', {
-        'favorite_ads': favorite_ads
+        'ads': favorite_ads
     })
 
 
@@ -246,6 +246,7 @@ def my_advertisements(request):
     })
 
 def profile(request):
-    return render(request, '../templates/my_advertisement.html', {
+    #TODO: add profile page
+    return render(request, '../templates/profile.html', {
         'advertiser', Advertiser.objects.filter(user=request.user)[0]
     })
