@@ -151,4 +151,4 @@ class SubmitPassword(forms.Form):
 
 
 class ReportForm(forms.Form):
-    description = forms.Textarea()
+    description = forms.CharField(widget=forms.Textarea)

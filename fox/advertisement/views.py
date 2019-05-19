@@ -216,9 +216,9 @@ def favorite_advertisement(request):
 
 
 def add_favorite_advertisement(request, advertisement_id):
-    advertiser = Advertiser.objects.filter(user=request.user)
-    advertisement = Advertisement.objects.filter(pk=advertisement_id)
-    advertiser.favorites_ads.add(advertisement)
+    advertiser = Advertiser.objects.filter(user=request.user)[0]
+    advertisement = Advertisement.objects.filter(pk=advertisement_id)[0]
+    advertiser.favorite_ads.add(advertisement)
     advertiser.save()
     return redirect('advertisement_detail', advertisement_id=advertisement_id)
 
@@ -226,7 +226,7 @@ def add_favorite_advertisement(request, advertisement_id):
 def report_advertisement(request, advertisement_id):
     form = ReportForm(request.POST)
     if form.is_valid():
-        advertisement = Advertisement.objects.filter(pk=advertisement_id)
+        advertisement = Advertisement.objects.filter(pk=advertisement_id)[0]
         description = form.cleaned_data['description']
         subject = 'Report Advertisement'
         body = render_to_string('report_template', context={
