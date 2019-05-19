@@ -49,8 +49,38 @@
                         <h6> {{ advertisement.advertiser.first_name }} {{ advertisement.advertiser.last_name }}</h6>
                     </div>
                     <div class="section" style="padding-bottom:20px;">
-                        <button class="btn btn-success"><span style="margin-right:20px" class="glyphicon glyphicon-share-alt" aria-hidden="true"></span></button>
-                        <button class="btn btn-primary"><span style="margin-right:20px" class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+
+                    <button type="button" class =  "btn btn-success glyphicon glyphicon-share" data-toggle="modal"   data-target="#exampleModal1" >salam</button>
+
+                    <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog"
+                         aria-labelledby="exampleModalLabel1" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"
+                                            aria-label="Close"
+                                            style="margin: 0; padding: 0">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <h5 class="modal-title" id="exampleModalLabel1">Link
+                                       </h5>
+                                </div>
+                                <div class="modal-body">
+                                    Here comes the link
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Exit
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                        <button class="btn btn-danger"><span style="margin-right:20px" class="glyphicon glyphicon-heart" aria-hidden="true"></span></button>
+                        <button class="btn btn-warning"><span style="margin-right:20px" class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span></button>
+
 
                     </div>
 
