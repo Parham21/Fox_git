@@ -1,9 +1,9 @@
 ul > li{margin-right:25px;font-weight:lighter;cursor:pointer}
 li.active{border-bottom:3px solid silver;}
 
-.item-photo{display:flex;justify-content:center;align-items:center;border-right:1px solid #f6f6f6;}
+.item-photo{justify-content:center;align-items:center;border-right:1px solid #f6f6f6;}
 .menu-items{list-style-type:none;font-size:11px;display:inline-flex;margin-bottom:0;margin-top:20px}
-.btn-success{width:100%;}
+
 .section{width:100%;margin-left:-15px;padding:2px;padding-left:15px;padding-right:15px;background:#f8f9f9}
 .title-price{margin-top:30px;margin-bottom:0;color:black}
 .title-attr{margin-top:0;margin-bottom:0;color:black;}
@@ -23,7 +23,7 @@ div.section > div > input {margin:0;padding-left:5px;font-size:10px;padding-righ
     width: 53.33333333%;
 }
 
-.btn {
+.hel {
     width: 40px;
     margin-bottom: 10px;
 }
@@ -61,12 +61,26 @@ img {
 
 .search-res h2 {
     position: relative;
-    top: 18px;
     left: 10px;
 }
 
 .search-res h6 {
     position: relative;
-    top: 18px;
+    top: 10px;
     left: 10px;
+}
+
+.modal.fade {
+  z-index: 10000000 !important;
+}
+
+
+
+.relatedads {
+    width: 90%;
+}
+
+h1 {
+    color: black;
+    font-weight: 300;
 }

@@ -12,13 +12,13 @@
 
     <title>Details</title>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="{% static 'detail_css.css' %}">
     <link rel="icon" href="{% static 'favicon.ico' %}">
 
 </head>
-    <body >
+    <body style="background-image: url({% static 'bg2.jpg' %})">
         <div class="container">
         	<div class="row">
                <div class="col-xs-4 item-photo">
@@ -26,15 +26,21 @@
                 </div>
                 <div class="col-xs-5" style="border:0px solid gray">
                     <!-- Datos del vendedor y titulo del producto -->
+                    <div class="section">
                     <h3>{{ advertisement.title }}</h3>
+                    </div>
 
                     <!-- Precios -->
+                    <div class="section">
                     <h3 class="title-price"><small>Price</small></h3>
                     <h5 style="margin-top:0px;">{{ advertisement.price }}</h5>
+                    </div>
+
+                    <div class="section">
 
                     <h3 class="title-price"><small>Details</small></h3>
                     <h5 style="margin-top:0px;">{{ advertisement.description }}</h5>
-
+                    </div>
                     <!-- Detalles especificos del producto -->
                     <div class="section">
                         <h4 class="title-attr" style="margin-top:15px;" ><small>CALL</small></h4>
@@ -50,9 +56,45 @@
                     </div>
                     <div class="section" style="padding-bottom:20px;">
 
-                    <button type="button" class =  "btn btn-success glyphicon glyphicon-share" data-toggle="modal"   data-target="#exampleModal1" >salam</button>
+                    <button type="button" class =  "hel btn btn-success glyphicon glyphicon-share" data-toggle="modal"   data-target="#exampleModal1" ></button>
+                        <button class="hel btn btn-danger"><span style="margin-right:20px" class="glyphicon glyphicon-heart" aria-hidden="true"></span></button>
+                    <button type="button" class =  "hel btn btn-warning glyphicon glyphicon-share" data-toggle="modal"   data-target="#exampleModal2" ></button>
 
-                    <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog"
+
+
+                </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <h1 id = "#ads"><small>Related Advertisements</small></h1>
+            </div>
+            <div class="row relatedads" >
+                <div class="col-xs-8 col-md-7 col-lg-7 col-sm-7 the-box
+                list-group table-of-contents" style="margin-top: 30px; margin-left: 10px">
+            {% for ad in ads %}
+                <div style="color:black" class="list-group-item"
+                     onclick="location.href='{% url 'advertisement_detail' ad.id %}'">
+                    <div style="display: flex; justify-content: space-between">
+                        <div style="float: left; flex-grow: 1" class="search-res">
+                            <img style="width: 80px; height: 80px" alt="ad-image" src='/media/{{ ad.profile_image }}'/>
+                            <h2>{{ ad.title }}</h2>
+                            <h6>Advertiser: {{ ad.advertiser }}</h6>
+                            <h6>Area: {{ ad.area }}</h6>
+                            <br>
+                        </div>
+                        <p style="float: right; margin: auto 10px; font-size: 25px; font-weight: bold">{{ ad.price }}$</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+            </div>
+        </div>
+
+
+    <div class="modal fade"  id="exampleModal1"  role="dialog"
                          aria-labelledby="exampleModalLabel1" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -77,38 +119,45 @@
                         </div>
                     </div>
 
+                               <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog"
+                                         aria-labelledby="ModalLabel2" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close"
+                                                            style="margin: 0; padding: 0">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                    <h5 class="modal-title" id="ModalLabel2">Report
+                                                    </h5>
 
-                        <button class="btn btn-danger"><span style="margin-right:20px" class="glyphicon glyphicon-heart" aria-hidden="true"></span></button>
-                        <button class="btn btn-warning"><span style="margin-right:20px" class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                                    <textarea class="form-control" rows="5"
+                                                                              id="comment"
+                                                                              style="color: black"
+                                                                              placeholder="Explain your report"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Exit
+                                                    </button>
+                                                    <button type="button" class="btn btn-success"
+                                                            data-dismiss="modal" id="submit-feedback">Submit
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+
 
 
                     </div>
-
-                </div>
-
-                </div>
-
-            <div class="row">
-                <div class="col-xs-8 col-md-7 col-lg-7 col-sm-7 the-box
-                list-group table-of-contents" style="margin-top: 30px; margin-left: 10px">
-            {% for ad in ads %}
-                <div style="color:black" class="list-group-item"
-                     onclick="location.href='{% url 'advertisement_detail' ad.id %}'">
-                    <div style="display: flex; justify-content: space-between">
-                        <div style="float: left; flex-grow: 1" class="search-res">
-                            <img style="width: 80px; height: 80px" alt="ad-image" src='/media/{{ ad.profile_image }}'/>
-                            <h2>{{ ad.title }}</h2>
-                            <h6>advertiser: {{ ad.advertiser }}</h6>
-                            <h6>area: {{ ad.area }}</h6>
-                            <br>
-                        </div>
-                        <p style="float: right; margin: auto 10px; font-size: 25px; font-weight: bold">{{ ad.price }}</p>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-
-            </div>
-        </div>
     </body>
 </html>
