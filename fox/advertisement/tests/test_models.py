@@ -26,10 +26,10 @@ class TestAdvertisementModels(TestCase):
         area.save()
         return area
 
-    def createAdvertiser(self):
+    def createAdvertiser(self, username, email):
         area = self.createArea()
-        user = User.objects.create_user('fatemeh')
-        exp_data = {'first_name': 'Fatemeh', 'last_name': 'Zardbani', 'email': 'F@gmail.com', 'phone': 1234321, 'sex': 'F', 'age': 20, 'area': area, 'user': user}
+        user = User.objects.create_user(username)
+        exp_data = {'first_name': 'Fatemeh', 'last_name': 'Zardbani', 'email': email, 'phone': 1234321, 'sex': 'F', 'age': 20, 'area': area, 'user': user}
 
         advertiser = Advertiser.objects.create(first_name= exp_data['first_name'], last_name= exp_data['last_name'], email= exp_data['email'], phone= exp_data['phone'], sex= exp_data['sex'], age= exp_data['age'], user= exp_data['user'])
         advertiser.save()
@@ -47,7 +47,7 @@ class TestAdvertisementModels(TestCase):
 
     def createAdvertisement(self):
         area = self.createArea()
-        advertiser = self.createAdvertiser()
+        advertiser = self.createAdvertiser('folan', 't@y.com')
         category = self.createCategory('CAT', None)
         exp_data = {
             'title': 'Hello',
@@ -81,6 +81,7 @@ class TestAdvertisementModels(TestCase):
         city = self.createCity()
         self.assertEqual(City.objects.count(), count + 1)
         self.assertEqual(city.name, exp_data["name"])
+        self.assertEqual(city.__str__(), exp_data["name"])
     
     def testArea(self):
         count = Area.objects.count()
@@ -90,7 +91,9 @@ class TestAdvertisementModels(TestCase):
         self.assertEqual(Area.objects.count(), count + 1)
         self.assertEqual(area.name, exp_data["name"])
         self.assertEqual(area.city.name, exp_data["city_name"])
-    
+        
+        self.assertEqual(area.__str__(), (exp_data["city_name"] + ' ' + exp_data['name']))
+
     def testCategory(self):
         count = Category.objects.count()
         cat = self.createCategory('greetings', None)
@@ -104,11 +107,12 @@ class TestAdvertisementModels(TestCase):
         self.assertEqual(cat3.title, "bye")
         self.assertEqual(cat2.parent, cat)
         self.assertEqual(cat3.parent, cat)  
+        self.assertEqual(cat.__str__(), "greetings")
         
     def testAdvertiser(self):
         count = Advertiser.objects.count()
-        adv = self.createAdvertiser()
-        exp_data = {'first_name': 'Fatemeh', 'last_name': 'Zardbani', 'email': 'F@gmail.com', 'phone': 1234321, 'sex': 'F', 'age': 20}
+        adv = self.createAdvertiser('hello', 'e@r.com')
+        exp_data = {'first_name': 'Fatemeh', 'last_name': 'Zardbani', 'email': 'e@r.com', 'phone': 1234321, 'sex': 'F', 'age': 20}
 
         self.assertEqual(Advertiser.objects.count(), count + 1)
         self.assertEqual(adv.first_name, exp_data['first_name'])
@@ -117,6 +121,7 @@ class TestAdvertisementModels(TestCase):
         self.assertEqual(adv.phone, exp_data['phone'])
         self.assertEqual(adv.sex, exp_data['sex'])
         self.assertEqual(adv.age, exp_data['age'])
+        self.assertEqual(adv.__str__(), (exp_data['first_name'] + ' ' + exp_data['last_name']))
     
     def testAdvertisement(self):
         count = Advertisement.objects.count()
@@ -144,4 +149,20 @@ class TestAdvertisementModels(TestCase):
         self.assertEqual(ad.area.name, exp_data['area_name'])
         self.assertEqual(ad.area.city.name, exp_data['city_name'])
         self.assertEqual(ad.advertiser.first_name, exp_data['advertiser_name'])
-        
+        self.assertEqual(ad.__str__(), (exp_data['title'] + ' ' + exp_data['area_name'] + ' ' + exp_data['city_name']))
+
+    def testAdvertiserAgain(self):
+        count = Advertiser.objects.count()
+        adv = self.createAdvertiser('heeey', 'q@w.com')
+        ad = self.createAdvertisement()
+
+        adv.favorite_ads.add(ad)
+        self.assertEqual(adv.favorite_ads.all().count(), 1)
+
+    # def testAdvertiserAgainToo(self):
+    #     area = self.createArea()
+    #     user = User.objects.create_user('filan')
+    #     exp_data = {'first_name': 'Fatemeh', 'last_name': 'Zardbani', 'email': 'k@l.com', 'phone': 1234321, 'sex': 'F', 'age': 20, 'area': area, 'user': user}
+
+    #     advertiser = AdvertiserFactory(first_name= exp_data['first_name'], last_name= exp_data['last_name'], email= exp_data['email'], phone= exp_data['phone'], sex= exp_data['sex'], age= exp_data['age'], user= exp_data['user'])
+                
