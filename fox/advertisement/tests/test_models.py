@@ -31,7 +31,7 @@ class TestAdvertisementModels(TestCase):
         user = User.objects.create_user('fatemeh')
         exp_data = {'first_name': 'Fatemeh', 'last_name': 'Zardbani', 'email': 'F@gmail.com', 'phone': 1234321, 'sex': 'F', 'age': 20, 'area': area, 'user': user}
 
-        advertiser = Advertiser.objects.create(first_name= exp_data['first_name'], last_name= exp_data['last_name'], email= exp_data['email'], phone= exp_data['phone'], sex= exp_data['sex'], age= exp_data['age'], area= exp_data['area'], user= exp_data['user'])
+        advertiser = Advertiser.objects.create(first_name= exp_data['first_name'], last_name= exp_data['last_name'], email= exp_data['email'], phone= exp_data['phone'], sex= exp_data['sex'], age= exp_data['age'], user= exp_data['user'])
         advertiser.save()
 
         return advertiser
@@ -104,4 +104,44 @@ class TestAdvertisementModels(TestCase):
         self.assertEqual(cat3.title, "bye")
         self.assertEqual(cat2.parent, cat)
         self.assertEqual(cat3.parent, cat)  
+        
+    def testAdvertiser(self):
+        count = Advertiser.objects.count()
+        adv = self.createAdvertiser()
+        exp_data = {'first_name': 'Fatemeh', 'last_name': 'Zardbani', 'email': 'F@gmail.com', 'phone': 1234321, 'sex': 'F', 'age': 20}
+
+        self.assertEqual(Advertiser.objects.count(), count + 1)
+        self.assertEqual(adv.first_name, exp_data['first_name'])
+        self.assertEqual(adv.last_name, exp_data['last_name'])
+        self.assertEqual(adv.email, exp_data['email'])
+        self.assertEqual(adv.phone, exp_data['phone'])
+        self.assertEqual(adv.sex, exp_data['sex'])
+        self.assertEqual(adv.age, exp_data['age'])
+    
+    def testAdvertisement(self):
+        count = Advertisement.objects.count()
+        ad = self.createAdvertisement()
+        exp_data = {
+            'title': 'Hello',
+            'price': 23,
+            'phone': 1234321,
+            'description': 'hey hey hey hey',
+            'profile_image': self.img,
+            'category_name': 'CAT',
+            'immediate': True,
+            'area_name': 'Niavaran',
+            'city_name': 'Tehran',
+            'advertiser_name': 'Fatemeh'
+        }
+
+        self.assertEqual(Advertisement.objects.count(), count + 1)
+        self.assertEqual(ad.title, exp_data['title'])
+        self.assertEqual(ad.price, exp_data['price'])
+        self.assertEqual(ad.phone, exp_data['phone'])
+        self.assertEqual(ad.description, exp_data['description'])
+        self.assertEqual(ad.category.title, exp_data['category_name'])
+        self.assertEqual(ad.immediate, exp_data['immediate'])
+        self.assertEqual(ad.area.name, exp_data['area_name'])
+        self.assertEqual(ad.area.city.name, exp_data['city_name'])
+        self.assertEqual(ad.advertiser.first_name, exp_data['advertiser_name'])
         
