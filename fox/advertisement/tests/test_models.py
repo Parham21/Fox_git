@@ -26,22 +26,22 @@ class TestAdvertisementModels(TestCase):
         area.save()
         return area
 
-    # def createAdvertiser(self):
-    #     area = self.createArea()
-    #     user = User.objects.create_user('fatemeh')
-    #     exp_data = {'first_name': 'Fatemeh', 'last_name': 'Zardbani', 'email': 'F@gmail.com', 'phone': 1234321, 'sex': 'F', 'age': 20, 'area': area, 'user': user}
+    def createAdvertiser(self):
+        area = self.createArea()
+        user = User.objects.create_user('fatemeh')
+        exp_data = {'first_name': 'Fatemeh', 'last_name': 'Zardbani', 'email': 'F@gmail.com', 'phone': 1234321, 'sex': 'F', 'age': 20, 'area': area, 'user': user}
 
-    #     advertiser = Advertiser.objects.create('first_name'= exp_data['first_name'], 'last_name'= exp_data['last_name'], 'email'= exp_data['email'], 'phone'= exp_data['phone'], 'sex'= exp_data['sex'], 'age'= exp_data['age'], 'area'= exp_data['area'], 'user'= exp_data['user'])
-    #     advertiser.save()
+        advertiser = Advertiser.objects.create(first_name= exp_data['first_name'], last_name= exp_data['last_name'], email= exp_data['email'], phone= exp_data['phone'], sex= exp_data['sex'], age= exp_data['age'], area= exp_data['area'], user= exp_data['user'])
+        advertiser.save()
 
-    #     return advertiser
+        return advertiser
     
     def createCategory(self, name, father):
         if father is not None:
-            cat = Category.objects.create(name = name, parent= father)
+            cat = Category.objects.create(title = name, parent= father)
             cat.save()
             return cat
-        cat = Category.objects.create(name=name)
+        cat = Category.objects.create(title=name)
         cat.save()
         return cat
 
@@ -81,3 +81,27 @@ class TestAdvertisementModels(TestCase):
         city = self.createCity()
         self.assertEqual(City.objects.count(), count + 1)
         self.assertEqual(city.name, exp_data["name"])
+    
+    def testArea(self):
+        count = Area.objects.count()
+        city = self.createCity()
+        exp_data = {"name": "Niavaran", "city": city, "city_name": "Tehran"}
+        area = self.createArea()
+        self.assertEqual(Area.objects.count(), count + 1)
+        self.assertEqual(area.name, exp_data["name"])
+        self.assertEqual(area.city.name, exp_data["city_name"])
+    
+    def testCategory(self):
+        count = Category.objects.count()
+        cat = self.createCategory('greetings', None)
+
+        cat2 = self.createCategory('hello', cat)
+        cat3 = self.createCategory('bye', cat)
+
+        self.assertEqual(Category.objects.count(), count + 3)
+        self.assertEqual(cat.title, "greetings")
+        self.assertEqual(cat2.title, "hello")
+        self.assertEqual(cat3.title, "bye")
+        self.assertEqual(cat2.parent, cat)
+        self.assertEqual(cat3.parent, cat)  
+        
