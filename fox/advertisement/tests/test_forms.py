@@ -3,7 +3,7 @@ import datetime
 from django.core.files.uploadedfile import SimpleUploadedFile
 import os
 import logging
-from ..forms import AddAdvertisementForm, AddAdvertiserForm, SearchForm
+from ..forms import AddAdvertisementForm, AddAdvertiserForm, SearchForm, LoginForm, ResetPassForm, ReportForm, SubmitPassword
 from ..models import Advertisement, Advertiser, City, Area, Category
 from django.contrib.auth.models import User
 
@@ -83,6 +83,17 @@ class TestForm(TestCase):
 
     def test_AddAdvertiserForm(self):
         invalid_data = {'first_name': 'Fatemeh',
+                        'last_name': 'Zardbani',
+                        'email': 'F@gmail.com',
+                        'phone': 1234321,
+                        'sex': 'F',
+                        'age': 20}
+
+        form = AddAdvertiserForm(data=invalid_data)
+        form.is_valid()
+        self.assertTrue(form.errors)
+
+        invalid_data = {'first_name': 132423,
                         'last_name': 'Zardbani',
                         'email': 'F@gmail.com',
                         'phone': 1234321,
@@ -187,5 +198,87 @@ class TestForm(TestCase):
         }
 
         form = AddAdvertisementForm(data=invalid_data)
+        form.is_valid()
+        self.assertTrue(form.errors)
+
+
+    def test_LoginForm(self):
+        valid_data = {
+            'username': 'hey',
+            'password': '23werew'
+        }
+
+        form = LoginForm(data=valid_data)
+        form.is_valid()
+        self.assertFalse(form.errors)
+
+    def test_SearchForm(self):
+        area = self.createArea()
+        valid_data = {
+            'title': 'hey',
+            'immediate': False, 
+            'minimum_price': 12,
+            'maximum_price': 22,
+            # 'area': area,
+            'has_image': True
+            
+        }
+
+        form = SearchForm(data=valid_data)
+        form.is_valid()
+        self.assertFalse(form.errors)
+
+        invalid_data = {
+            'title': 'hey',
+            'immediate': False, 
+            'minimum_price': 12,
+            'maximum_price': 2,
+            # 'area': area,
+            'has_image': True
+            
+        }
+
+        form = SearchForm(data=invalid_data)
+        form.is_valid()
+        self.assertTrue(form.errors)
+        
+    def test_ResetPasswordForm(self):
+        
+        valid_data = {
+            'email': 'hey@g.com',
+        }
+
+        form = ResetPassForm(data=valid_data)
+        form.is_valid()
+        self.assertFalse(form.errors)
+
+    
+    def test_ReportForm(self):
+        
+        valid_data = {
+            'description': 'asdfoiaerfdadfnafvom',
+        }
+
+        form = ReportForm(data=valid_data)
+        form.is_valid()
+        self.assertFalse(form.errors)
+
+    def test_SubmitPassForm(self):
+        
+        valid_data = {
+            'password': 'asdfoiaerfdadfnafvom',
+            'confirm_password': 'asdfoiaerfdadfnafvom'
+        }
+
+        form = SubmitPassword(data=valid_data)
+        form.is_valid()
+        self.assertFalse(form.errors)
+
+        invalid_data = {
+            'password': 'asdfoiaerfdadfnafvom',
+            'confirm_password': 'dfgsfg'
+        }
+
+        form = SubmitPassword(data=invalid_data)
         form.is_valid()
         self.assertTrue(form.errors)
