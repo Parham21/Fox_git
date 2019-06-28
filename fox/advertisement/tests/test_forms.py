@@ -7,6 +7,7 @@ from ..forms import AddAdvertisementForm, AddAdvertiserForm, SearchForm
 from ..models import Advertisement, Advertiser, City, Area, Category
 from django.contrib.auth.models import User
 
+
 class TestForm(TestCase):
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     image_path = os.path.join(BASE_DIR, "testMedia/image1.jpg")
@@ -20,7 +21,7 @@ class TestForm(TestCase):
         city = City.objects.create(name=exp_data['name'])
         city.save()
         return city
-    
+
     def createArea(self):
         city = self.createCity()
         exp_data = {"name": "Niavaran", "city": city}
@@ -31,23 +32,25 @@ class TestForm(TestCase):
     def createAdvertiser(self, username, email):
         area = self.createArea()
         user = User.objects.create_user(username)
-        exp_data = {'first_name': 'Fatemeh', 'last_name': 'Zardbani', 'email': email, 'phone': 1234321, 'sex': 'F', 'age': 20, 'area': area, 'user': user}
+        exp_data = {'first_name': 'Fatemeh', 'last_name': 'Zardbani', 'email': email, 'phone': 1234321, 'sex': 'F',
+                    'age': 20, 'area': area, 'user': user}
 
-        advertiser = Advertiser.objects.create(first_name= exp_data['first_name'], last_name= exp_data['last_name'], email= exp_data['email'], phone= exp_data['phone'], sex= exp_data['sex'], age= exp_data['age'], user= exp_data['user'])
+        advertiser = Advertiser.objects.create(first_name=exp_data['first_name'], last_name=exp_data['last_name'],
+                                               email=exp_data['email'], phone=exp_data['phone'], sex=exp_data['sex'],
+                                               age=exp_data['age'], user=exp_data['user'])
         advertiser.save()
 
         return advertiser
-    
+
     def createCategory(self, name, father):
         if father is not None:
-            cat = Category.objects.create(title = name, parent= father)
+            cat = Category.objects.create(title=name, parent=father)
             cat.save()
             return cat
         cat = Category.objects.create(title=name)
         cat.save()
         return cat
 
-    
     def createAdvertisement(self):
         area = self.createArea()
         advertiser = self.createAdvertiser('folan', 't@y.com')
@@ -64,46 +67,27 @@ class TestForm(TestCase):
             'advertiser': advertiser
         }
 
-        ad = Advertisement.objects.create(title= exp_data['title'],
-            price = exp_data['price'],
-            phone = exp_data['phone'],
-            description = exp_data['description'],
-            profile_image = exp_data['profile_image'],
-            category=exp_data['category'],
-            immediate = exp_data['immediate'],
-            area = exp_data['area'],
-            advertiser = exp_data['advertiser'] )
-        
+        ad = Advertisement.objects.create(title=exp_data['title'],
+                                          price=exp_data['price'],
+                                          phone=exp_data['phone'],
+                                          description=exp_data['description'],
+                                          profile_image=exp_data['profile_image'],
+                                          category=exp_data['category'],
+                                          immediate=exp_data['immediate'],
+                                          area=exp_data['area'],
+                                          advertiser=exp_data['advertiser'])
+
         ad.save()
-        
+
         return ad
 
-
     def test_AddAdvertiserForm(self):
-        invalid_data = {'first_name': 'Fatemeh', 
-        'last_name': 'Zardbani', 
-        'email': 'F@gmail.com', 
-        'phone': 1234321, 
-        'sex': 'F', 
-        'age': 20}
-
-
-        form = AddAdvertiserForm(data=invalid_data)
-        form.is_valid()
-        self.assertTrue(form.errors)
-
-
-        invalid_data = {
-            'username': 'hey',
-            'password': '12werew',
-            'first_name': 'Fatemeh', 
-            'last_name': 'Zardbani', 
-            'email': 'F@gmail.com', 
-            'phone': '09127784405', 
-            'sex': 'F', 
-            'favorite_ads': [],
-            'age': 20}
-
+        invalid_data = {'first_name': 'Fatemeh',
+                        'last_name': 'Zardbani',
+                        'email': 'F@gmail.com',
+                        'phone': 1234321,
+                        'sex': 'F',
+                        'age': 20}
 
         form = AddAdvertiserForm(data=invalid_data)
         form.is_valid()
@@ -112,30 +96,43 @@ class TestForm(TestCase):
         invalid_data = {
             'username': 'hey',
             'password': '12werew',
-            'first_name': 'Fatemeh', 
-            'last_name': 'Zardbani', 
-            'email': 'F@gmail.com', 
-            'phone': '09127784405', 
-            'sex': 'Fdsv', 
+            'first_name': 'Fatemeh',
+            'last_name': 'Zardbani',
+            'email': 'F@gmail.com',
+            'phone': '09127784405',
+            'sex': 'F',
             'favorite_ads': [],
             'age': 20}
-
 
         form = AddAdvertiserForm(data=invalid_data)
         form.is_valid()
         self.assertTrue(form.errors)
-        
+
         invalid_data = {
             'username': 'hey',
             'password': '12werew',
-            'first_name': 'Fatemeh', 
-            'last_name': 'Zardbani', 
-            'email': 'F@gmail.com', 
-            'phone': '091277805', 
-            'sex': 'Fdsv', 
+            'first_name': 'Fatemeh',
+            'last_name': 'Zardbani',
+            'email': 'F@gmail.com',
+            'phone': '09127784405',
+            'sex': 'Fdsv',
             'favorite_ads': [],
             'age': 20}
 
+        form = AddAdvertiserForm(data=invalid_data)
+        form.is_valid()
+        self.assertTrue(form.errors)
+
+        invalid_data = {
+            'username': 'hey',
+            'password': '12werew',
+            'first_name': 'Fatemeh',
+            'last_name': 'Zardbani',
+            'email': 'F@gmail.com',
+            'phone': '091277805',
+            'sex': 'Fdsv',
+            'favorite_ads': [],
+            'age': 20}
 
         form = AddAdvertiserForm(data=invalid_data)
         form.is_valid()
@@ -143,18 +140,16 @@ class TestForm(TestCase):
 
         ad1 = self.createAdvertisement()
 
-
         invalid_data = {
             'username': 'hey',
             'password': '12werew',
-            'first_name': 'Fatemeh', 
-            'last_name': 'Zardbani', 
-            'email': 'F@gmail.com', 
-            'phone': '09127784405', 
-            'sex': 'F', 
+            'first_name': 'Fatemeh',
+            'last_name': 'Zardbani',
+            'email': 'F@gmail.com',
+            'phone': '09127784405',
+            'sex': 'F',
             'favorite_ads': [ad1],
             'age': 20}
-
 
         form = AddAdvertiserForm(data=invalid_data)
         form.is_valid()

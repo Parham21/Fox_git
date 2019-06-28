@@ -5,6 +5,7 @@ import datetime
 from django.core.files.uploadedfile import SimpleUploadedFile
 import os
 
+
 class TestAdvertisementModels(TestCase):
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     image_path = os.path.join(BASE_DIR, "testMedia/image1.jpg")
@@ -18,7 +19,7 @@ class TestAdvertisementModels(TestCase):
         city = City.objects.create(name=exp_data['name'])
         city.save()
         return city
-    
+
     def createArea(self):
         city = self.createCity()
         exp_data = {"name": "Niavaran", "city": city}
@@ -29,16 +30,19 @@ class TestAdvertisementModels(TestCase):
     def createAdvertiser(self, username, email):
         area = self.createArea()
         user = User.objects.create_user(username)
-        exp_data = {'first_name': 'Fatemeh', 'last_name': 'Zardbani', 'email': email, 'phone': 1234321, 'sex': 'F', 'age': 20, 'area': area, 'user': user}
+        exp_data = {'first_name': 'Fatemeh', 'last_name': 'Zardbani', 'email': email, 'phone': 1234321, 'sex': 'F',
+                    'age': 20, 'area': area, 'user': user}
 
-        advertiser = Advertiser.objects.create(first_name= exp_data['first_name'], last_name= exp_data['last_name'], email= exp_data['email'], phone= exp_data['phone'], sex= exp_data['sex'], age= exp_data['age'], user= exp_data['user'])
+        advertiser = Advertiser.objects.create(first_name=exp_data['first_name'], last_name=exp_data['last_name'],
+                                               email=exp_data['email'], phone=exp_data['phone'], sex=exp_data['sex'],
+                                               age=exp_data['age'], user=exp_data['user'])
         advertiser.save()
 
         return advertiser
-    
+
     def createCategory(self, name, father):
         if father is not None:
-            cat = Category.objects.create(title = name, parent= father)
+            cat = Category.objects.create(title=name, parent=father)
             cat.save()
             return cat
         cat = Category.objects.create(title=name)
@@ -61,18 +65,18 @@ class TestAdvertisementModels(TestCase):
             'advertiser': advertiser
         }
 
-        ad = Advertisement.objects.create(title= exp_data['title'],
-            price = exp_data['price'],
-            phone = exp_data['phone'],
-            description = exp_data['description'],
-            profile_image = exp_data['profile_image'],
-            category=exp_data['category'],
-            immediate = exp_data['immediate'],
-            area = exp_data['area'],
-            advertiser = exp_data['advertiser'] )
-        
+        ad = Advertisement.objects.create(title=exp_data['title'],
+                                          price=exp_data['price'],
+                                          phone=exp_data['phone'],
+                                          description=exp_data['description'],
+                                          profile_image=exp_data['profile_image'],
+                                          category=exp_data['category'],
+                                          immediate=exp_data['immediate'],
+                                          area=exp_data['area'],
+                                          advertiser=exp_data['advertiser'])
+
         ad.save()
-        
+
         return ad
 
     def testCity(self):
@@ -82,7 +86,7 @@ class TestAdvertisementModels(TestCase):
         self.assertEqual(City.objects.count(), count + 1)
         self.assertEqual(city.name, exp_data["name"])
         self.assertEqual(city.__str__(), exp_data["name"])
-    
+
     def testArea(self):
         count = Area.objects.count()
         city = self.createCity()
@@ -91,7 +95,7 @@ class TestAdvertisementModels(TestCase):
         self.assertEqual(Area.objects.count(), count + 1)
         self.assertEqual(area.name, exp_data["name"])
         self.assertEqual(area.city.name, exp_data["city_name"])
-        
+
         self.assertEqual(area.__str__(), (exp_data["city_name"] + ' ' + exp_data['name']))
 
     def testCategory(self):
@@ -106,13 +110,14 @@ class TestAdvertisementModels(TestCase):
         self.assertEqual(cat2.title, "hello")
         self.assertEqual(cat3.title, "bye")
         self.assertEqual(cat2.parent, cat)
-        self.assertEqual(cat3.parent, cat)  
+        self.assertEqual(cat3.parent, cat)
         self.assertEqual(cat.__str__(), "greetings")
-        
+
     def testAdvertiser(self):
         count = Advertiser.objects.count()
         adv = self.createAdvertiser('hello', 'e@r.com')
-        exp_data = {'first_name': 'Fatemeh', 'last_name': 'Zardbani', 'email': 'e@r.com', 'phone': 1234321, 'sex': 'F', 'age': 20}
+        exp_data = {'first_name': 'Fatemeh', 'last_name': 'Zardbani', 'email': 'e@r.com', 'phone': 1234321, 'sex': 'F',
+                    'age': 20}
 
         self.assertEqual(Advertiser.objects.count(), count + 1)
         self.assertEqual(adv.first_name, exp_data['first_name'])
@@ -122,7 +127,7 @@ class TestAdvertisementModels(TestCase):
         self.assertEqual(adv.sex, exp_data['sex'])
         self.assertEqual(adv.age, exp_data['age'])
         self.assertEqual(adv.__str__(), (exp_data['first_name'] + ' ' + exp_data['last_name']))
-    
+
     def testAdvertisement(self):
         count = Advertisement.objects.count()
         ad = self.createAdvertisement()
@@ -165,4 +170,3 @@ class TestAdvertisementModels(TestCase):
     #     exp_data = {'first_name': 'Fatemeh', 'last_name': 'Zardbani', 'email': 'k@l.com', 'phone': 1234321, 'sex': 'F', 'age': 20, 'area': area, 'user': user}
 
     #     advertiser = AdvertiserFactory(first_name= exp_data['first_name'], last_name= exp_data['last_name'], email= exp_data['email'], phone= exp_data['phone'], sex= exp_data['sex'], age= exp_data['age'], user= exp_data['user'])
-                
