@@ -8,7 +8,7 @@ from django.template.loader import render_to_string
 
 from advertisement.constant import ADMIN_MAILS, CATEGORY_LAYER
 from advertisement.models import Advertisement, Advertiser, ResetPassword, Category
-from advertisement.utils import send_email_async
+from advertisement.utils import send_email_async, generate_random_token
 from .forms import SearchForm, AddAdvertisementForm, LoginForm, ResetPassForm, AddAdvertiserForm, SubmitPassword, \
     ReportForm
 from django.contrib.auth import authenticate, login, logout

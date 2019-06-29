@@ -40,26 +40,17 @@ class TestAdvertisementViews(TestCase):
         advertiser.save()
         return advertiser
 
-    def createDummyCategory(self, name, father):
-        if father is not None:
-            cat = Category.objects.create(title=name, parent=father)
-            cat.save()
-            return cat
-        cat = Category.objects.create(title=name)
-        cat.save()
-        return cat
 
     def createDummyAdvertisement(self):
         area = self.createDummyArea()
         advertiser = self.createDummyAdvertiser()
-        category = self.createDummyCategory('CAT', None)
         exp_data = {
             'title': 'Hello',
             'price': 23,
             'phone': 1234321,
             'description': 'hey hey hey hey',
             'profile_image': self.img,
-            'category': category,
+            'category': Category.objects.all()[20],
             'immediate': True,
             'area': area,
             'advertiser': advertiser
@@ -102,4 +93,61 @@ class TestAdvertisementViews(TestCase):
         response = target_view(req)
         self.assertEqual(response.status_code, 200)
 
-        #
+        self.assertEqual(my_advertisements(req).status_code, 200)
+        self.assertEqual(add_favorite_advertisement(req, 1).status_code, 302)
+        self.assertEqual(advertisement_detail(req, 1).status_code, 200)
+        self.assertEqual(home(req).status_code, 200)
+        self.assertEqual(get_categories(req)[0], [1, 13, 20])
+        subject = 'Report Advertisement'
+        body = render_to_string('report_template', context={
+            'advertisement_title': 'aaa',
+            'description': 'bbbbb'
+        })
+        email = EmailMessage(subject=subject, body=body, to=ADMIN_MAILS)
+        send_email_async(email)
+        generate_random_token()
+        request = RequestFactory().post(reverse('report_advertisement', args=[1]),
+                                        {'description': 'A test message'})
+        self.assertEqual(report_advertisement(request, 1).status_code, 302)
+
+        request = RequestFactory().post(reverse('adv_search'),
+                                        {'immediate': True,
+                                         'area': self.createDummyArea(),
+                                         'title': 'aaa',
+                                         'minimum_price': 10,
+                                         'has_image': True})
+        self.assertEqual(adv_search(request).status_code, 200)
+        request = RequestFactory().post(reverse('search'),
+                                        {'title': 'aaa', })
+        self.assertEqual(search(request).status_code, 200)
+
+        request = RequestFactory().get(reverse('add_advertisement'))
+        self.assertEqual(add_advertisement(request).status_code, 200)
+
+        request = RequestFactory().get(reverse('login'))
+        self.assertEqual(login_view(request).status_code, 200)
+
+        request = RequestFactory().post(reverse('login'),
+                                       {
+                                            'username': 'aaaa',
+                                            'password': 22222
+                                       })
+        self.assertEqual(login_view(request).status_code, 200)
+
+        request = RequestFactory().get(reverse('register'))
+        self.assertEqual(register(request).status_code, 200)
+
+        request = RequestFactory().get(reverse('reset_password'))
+        self.assertEqual(reset_password(request).status_code, 200)
+
+        request = RequestFactory().post(reverse('reset_password'),
+                                        {
+                                            'email': 'ahatami@gmail.com',
+                                        })
+        self.assertEqual(reset_password(request).status_code, 302)
+
+        request = RequestFactory().get(reverse('change_password'))
+        self.assertEqual(change_password(request).status_code, 200)
+
+        request = RequestFactory().post(reverse('change_password'))
+        self.assertEqual(change_password(request).status_code, 200)
