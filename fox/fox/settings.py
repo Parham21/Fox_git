@@ -140,3 +140,45 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'foxcompanycecourse@gmail.com'
 EMAIL_HOST_PASSWORD = 'inventor1375'
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '[{asctime}] [{levelname}] {message}',
+            'style': '{'
+        }
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': '/var/log/fox/server.log',
+            'formatter': 'simple'
+        }
+    },
+    'loggers': {
+        '': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': True
+        },
+        'django': {
+            'propagate': True,
+            'level': 'INFO'
+        },
+        'django.server': {
+            'propagate': True,
+            'level': 'INFO'
+        }
+    }
+}
+
+
