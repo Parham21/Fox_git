@@ -136,8 +136,8 @@ legend {
 }
 
 .title .avat:before {
-    content: "\A19C";
-    font-size: 38px;
+    content: "\1F464";
+    font-size: 30px;
 }
 
 .dropdown:hover {
