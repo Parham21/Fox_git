@@ -126,5 +126,14 @@ class TestAdvertisementViews(TestCase):
                                          'minimum_price': 10,
                                          'has_image': True})
         self.assertEqual(adv_search(request).status_code, 200)
+        request = RequestFactory().post(reverse('search'),
+                                        {'title': 'aaa', })
+        self.assertEqual(search(request).status_code, 200)
 
+        request = RequestFactory().get(reverse('add_advertisement'))
+        self.assertEqual(add_advertisement(request).status_code, 200)
 
+        request = RequestFactory().get(reverse('login'))
+        self.assertEqual(login_view(request).status_code, 200)
+
+        
