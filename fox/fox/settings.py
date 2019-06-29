@@ -160,7 +160,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': '/var/log/fox/server.log',
+            'filename': 'server.log',
             'formatter': 'simple'
         }
     },
