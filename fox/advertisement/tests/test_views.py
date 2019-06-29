@@ -102,4 +102,29 @@ class TestAdvertisementViews(TestCase):
         response = target_view(req)
         self.assertEqual(response.status_code, 200)
 
-        #
+        self.assertEqual(my_advertisements(req).status_code, 200)
+        self.assertEqual(add_favorite_advertisement(req, 1).status_code, 302)
+        self.assertEqual(advertisement_detail(req, 1).status_code, 200)
+        self.assertEqual(home(req).status_code, 200)
+        self.assertEqual(get_categories(req)[0], [1, 13, 20])
+        subject = 'Report Advertisement'
+        body = render_to_string('report_template', context={
+            'advertisement_title': 'aaa',
+            'description': 'bbbbb'
+        })
+        email = EmailMessage(subject=subject, body=body, to=ADMIN_MAILS)
+        send_email_async(email)
+        generate_random_token()
+        request = RequestFactory().post(reverse('report_advertisement', args=[1]),
+                                        {'description': 'A test message'})
+        self.assertEqual(report_advertisement(request, 1).status_code, 302)
+
+        request = RequestFactory().post(reverse('adv_search'),
+                                        {'immediate': True,
+                                         'area': self.createDummyArea(),
+                                         'title': 'aaa',
+                                         'minimum_price': 10,
+                                         'has_image': True})
+        self.assertEqual(adv_search(request).status_code, 200)
+
+
