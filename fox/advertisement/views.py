@@ -8,11 +8,12 @@ from django.template.loader import render_to_string
 
 from advertisement.constant import ADMIN_MAILS, CATEGORY_LAYER
 from advertisement.models import Advertisement, Advertiser, ResetPassword, Category
-from advertisement.utils import send_email_async
+from advertisement.utils import send_email_async, generate_random_token
 from .forms import SearchForm, AddAdvertisementForm, LoginForm, ResetPassForm, AddAdvertiserForm, SubmitPassword, \
     ReportForm
 from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
+
 
 def get_categories(request):
     query_category = request.GET.get('category')
@@ -28,7 +29,7 @@ def get_categories(request):
     ads_categories = []
     for category in Category.objects.all():
         if CATEGORY_LAYER[category.title] == 3 and (
-                            category.id in categories or category.parent.id in categories or category.parent.parent.id in categories):
+                category.id in categories or category.parent.id in categories or category.parent.parent.id in categories):
             ads_categories.append(category.id)
 
     return categories, ads_categories
@@ -59,6 +60,7 @@ def search(request):
             })
         else:
             return render(request, '../templates/search.html', {'form': form})
+
 
 def adv_search(request):
     categories, ads_categories = get_categories(request)
@@ -114,6 +116,7 @@ def add_advertisement(request):
             return redirect('search')
         else:
             return render(request, '../templates/add_advertisement.html', {'form': form})
+
 
 def home(request):
     return render(request, '../templates/home.html')
@@ -195,7 +198,8 @@ def change_password(request):
 def advertisement_detail(request, advertisement_id):
     try:
         advertisement = Advertisement.objects.get(pk=advertisement_id)
-        related_ads = Advertisement.objects.filter(category=advertisement.category, area=advertisement.area).exclude(id=advertisement_id)
+        related_ads = Advertisement.objects.filter(category=advertisement.category, area=advertisement.area).exclude(
+            id=advertisement_id)
         form = ReportForm()
         return render(request, '../templates/details.html', {
             'advertisement': advertisement,
@@ -245,8 +249,9 @@ def my_advertisements(request):
         'ads': Advertisement.objects.filter(advertiser__user=request.user)
     })
 
+
 def profile(request):
-    #TODO: add profile page
+    # TODO: add profile page
     return render(request, '../templates/profile.html', {
         'advertiser', Advertiser.objects.filter(user=request.user)[0]
     })
