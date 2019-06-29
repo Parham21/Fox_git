@@ -40,14 +40,6 @@ class TestAdvertisementViews(TestCase):
         advertiser.save()
         return advertiser
 
-    def createDummyCategory(self, name, father):
-        if father is not None:
-            cat = Category.objects.create(title=name, parent=father)
-            cat.save()
-            return cat
-        cat = Category.objects.create(title=name)
-        cat.save()
-        return cat
 
     def createDummyAdvertisement(self):
         area = self.createDummyArea()
