@@ -136,4 +136,27 @@ class TestAdvertisementViews(TestCase):
         request = RequestFactory().get(reverse('login'))
         self.assertEqual(login_view(request).status_code, 200)
 
-        
+        request = RequestFactory().post(reverse('login'),
+                                       {
+                                            'username': 'aaaa',
+                                            'password': 22222
+                                       })
+        self.assertEqual(login_view(request).status_code, 200)
+
+        request = RequestFactory().get(reverse('register'))
+        self.assertEqual(register(request).status_code, 200)
+
+        request = RequestFactory().get(reverse('reset_password'))
+        self.assertEqual(reset_password(request).status_code, 200)
+
+        request = RequestFactory().post(reverse('reset_password'),
+                                        {
+                                            'email': 'ahatami@gmail.com',
+                                        })
+        self.assertEqual(reset_password(request).status_code, 302)
+
+        request = RequestFactory().get(reverse('change_password'))
+        self.assertEqual(change_password(request).status_code, 200)
+
+        request = RequestFactory().post(reverse('change_password'))
+        self.assertEqual(change_password(request).status_code, 200)
