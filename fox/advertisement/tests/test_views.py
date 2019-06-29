@@ -44,7 +44,6 @@ class TestAdvertisementViews(TestCase):
     def createDummyAdvertisement(self):
         area = self.createDummyArea()
         advertiser = self.createDummyAdvertiser()
-        category = self.createDummyCategory('CAT', None)
         exp_data = {
             'title': 'Hello',
             'price': 23,
