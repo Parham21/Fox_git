@@ -59,7 +59,7 @@ class TestAdvertisementViews(TestCase):
             'phone': 1234321,
             'description': 'hey hey hey hey',
             'profile_image': self.img,
-            'category': category,
+            'category': Category.objects.all()[20],
             'immediate': True,
             'area': area,
             'advertiser': advertiser
